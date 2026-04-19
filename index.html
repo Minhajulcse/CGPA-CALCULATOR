@@ -9,11 +9,15 @@
     <meta name="keywords" content="CGPA calculator, DIU CGPA calculator, university grade calculator, SGPA calculator, Minhajul Islam">
     <meta name="author" content="Minhajul Islam">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
         /* LIGHT THEME (Default) */
         :root {
             --primary: #0070f3;
             --primary-hover: #0051a2;
+            --success: #17c964;
+            --success-hover: #12a150;
             --danger: #ff4d4f;
             --danger-hover: #cf1322;
             --bg: #f4f4f9;
@@ -34,6 +38,8 @@
         [data-theme="dark"] {
             --primary: #3291ff;
             --primary-hover: #0070f3;
+            --success: #17c964;
+            --success-hover: #12a150;
             --danger: #ff6b6b;
             --danger-hover: #fa5252;
             --bg: #121212;
@@ -54,6 +60,8 @@
         [data-theme="ocean"] {
             --primary: #00d2ff;
             --primary-hover: #3a7bd5;
+            --success: #00b09b;
+            --success-hover: #008a7a;
             --danger: #ff4b2b;
             --danger-hover: #ff416c;
             --bg: #0f2027;
@@ -71,121 +79,40 @@
         }
 
         /* Core Styles */
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            max-width: 700px;
-            margin: 2rem auto;
-            padding: 1rem;
-            line-height: 1.5;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: background-color 0.3s ease;
-        }
-
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); max-width: 700px; margin: 2rem auto; padding: 1rem; line-height: 1.5; transition: background-color 0.3s ease, color 0.3s ease; }
+        .card { background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: background-color 0.3s ease; }
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         h2 { margin: 0; color: var(--primary); }
         h3 { font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 1.5rem; color: var(--text); }
         
-        .theme-selector select {
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text);
-        }
+        .theme-selector select { padding: 0.4rem 0.8rem; border-radius: 20px; cursor: pointer; font-weight: bold; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text); }
 
-        .row {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            align-items: center;
-        }
-
-        input, select {
-            padding: 0.75rem;
-            border: 1px solid var(--input-border);
-            border-radius: 6px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            background-color: var(--input-bg);
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-        
-        /* Fix placeholder text color in dark modes */
+        .row { display: flex; gap: 1rem; margin-bottom: 1rem; align-items: center; }
+        input, select { padding: 0.75rem; border: 1px solid var(--input-border); border-radius: 6px; font-size: 1rem; box-sizing: border-box; background-color: var(--input-bg); color: var(--text); transition: all 0.3s ease; }
         ::placeholder { color: var(--text-muted); opacity: 0.7; }
-
         .flex-1 { flex: 1; width: 100%; }
         .grade-wrapper { flex: 1; display: flex; gap: 0.5rem; width: 100%; }
 
-        button {
-            padding: 0.75rem 1rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s, transform 0.1s;
-        }
-
+        button { padding: 0.75rem 1rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s, transform 0.1s; }
         button:hover { background: var(--primary-hover); }
         button:active { transform: scale(0.98); }
-        
-        .btn-outline {
-            background: transparent;
-            color: var(--primary);
-            border: 2px dashed var(--primary);
-            width: 100%;
-        }
-        
+        .btn-outline { background: transparent; color: var(--primary); border: 2px dashed var(--primary); width: 100%; }
         .btn-outline:hover { background: var(--result-bg); }
         .btn-sm { padding: 0.5rem; font-size: 0.9rem; }
         .remove-btn { background: var(--danger); padding: 0.75rem; }
         .remove-btn:hover { background: var(--danger-hover); }
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: var(--success-hover); }
 
-        .semester-block {
-            background: var(--semester-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
+        .semester-block { background: var(--semester-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; position: relative; }
         .semester-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .semester-title { margin: 0; color: var(--primary); border: none; padding: 0; }
 
-        .result {
-            margin-top: 1.5rem;
-            padding: 1.25rem;
-            background: var(--result-bg);
-            border-left: 4px solid var(--primary);
-            border-radius: 4px;
-            display: none;
-        }
-
+        .result { margin-top: 1.5rem; padding: 1.25rem; background: var(--result-bg); border-left: 4px solid var(--primary); border-radius: 4px; display: none; }
         .result p { margin: 0.5rem 0; color: var(--text); }
         .result .highlight { font-size: 1.25rem; font-weight: bold; color: var(--primary); margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;}
         .semester-sgpa-list { margin-bottom: 1rem; padding: 1rem; background: var(--card-bg); border-radius: 4px; border: 1px solid var(--border-color); }
 
-        /* Grading Table Styles */
         .reference-section { margin-top: 3rem; }
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
         th, td { border: 1px solid var(--border-color); padding: 10px; text-align: center; color: var(--text); }
@@ -193,28 +120,18 @@
         tr:nth-child(even) { background-color: var(--table-even); }
         tr:hover { background-color: var(--table-hover); }
 
-        /* Developer Footer Styles */
         .dev-footer { margin-top: 3rem; padding-top: 2rem; border-top: 2px dashed var(--border-color); text-align: center; }
         .dev-footer h4 { margin: 0; color: var(--primary); font-size: 1.2rem; }
         .dev-footer p { margin: 0.5rem 0 1.5rem 0; font-size: 0.9rem; color: var(--text-muted); }
         .social-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-        .social-links a {
-            text-decoration: none; color: var(--text); background: var(--card-bg);
-            padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.9rem;
-            font-weight: 500; border: 1px solid var(--border-color); transition: all 0.3s ease;
-            display: flex; align-items: center; gap: 0.5rem;
-        }
-        .social-links a:hover {
-            background: var(--primary); color: white; border-color: var(--primary);
-            transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+        .social-links a { text-decoration: none; color: var(--text); background: var(--card-bg); padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 500; border: 1px solid var(--border-color); transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
+        .social-links a:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
 
         @media (max-width: 550px) {
             .row { flex-direction: column; gap: 0.5rem; align-items: stretch; }
             .grade-wrapper { flex-direction: column; }
             th, td { padding: 6px; font-size: 0.85rem; }
-            .social-links { flex-direction: column; }
-            .header-section { flex-direction: column; gap: 1rem; text-align: center; }
+            .action-buttons { flex-direction: column; }
         }
     </style>
 </head>
@@ -232,8 +149,13 @@
             </div>
         </div>
 
+        <h3>Student Details (For Marksheet)</h3>
+        <div class="row">
+            <input type="text" id="studentName" class="flex-1" placeholder="Your Name (e.g., Minhajul Islam)">
+            <input type="text" id="studentId" class="flex-1" placeholder="Student ID (e.g., 201-15-XXXX)">
+        </div>
+
         <h3>Previous Results (Optional)</h3>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">Leave blank if you are calculating from scratch.</p>
         <div class="row">
             <input type="number" id="prevCgpa" class="flex-1" placeholder="Overall Previous CGPA (e.g., 3.80)" step="0.01" min="0" max="4.00">
             <input type="number" id="prevCredits" class="flex-1" placeholder="Total Previous Credits (e.g., 45)" step="0.5" min="0">
@@ -249,7 +171,6 @@
                 <div class="subjects-container">
                     <div class="row subject-row">
                         <input type="number" class="flex-1 credit-input" placeholder="Credit (e.g., 3)" step="0.5" min="0" required>
-                        
                         <div class="grade-wrapper">
                             <select class="flex-1 grade-select" onchange="handleGradeChange(this)" required>
                                 <option value="" disabled selected>Select Grade</option>
@@ -267,7 +188,6 @@
                             </select>
                             <input type="number" class="flex-1 gpa-input" placeholder="Enter GPA" step="0.01" min="0" max="4.00" style="display:none;">
                         </div>
-
                         <button class="remove-btn" onclick="this.parentElement.remove()" title="Remove Subject">X</button>
                     </div>
                 </div>
@@ -279,7 +199,10 @@
         
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
         
-        <button onclick="calculateCGPA()" style="width: 100%; font-size: 1.1rem; padding: 1rem;">Calculate Final CGPA</button>
+        <div class="row action-buttons">
+            <button onclick="calculateCGPA()" style="flex: 1; font-size: 1.1rem; padding: 1rem;">Calculate Final CGPA</button>
+            <button id="downloadPdfBtn" class="btn-success" onclick="generatePDF()" style="display:none; flex: 1; font-size: 1.1rem; padding: 1rem;">📥 Download Marksheet</button>
+        </div>
 
         <div id="resultBox" class="result"></div>
 
@@ -287,12 +210,7 @@
             <h3>Grading System Reference</h3>
             <table>
                 <thead>
-                    <tr>
-                        <th>Marks</th>
-                        <th>Grade</th>
-                        <th>Point</th>
-                        <th>Remarks</th>
-                    </tr>
+                    <tr><th>Marks</th><th>Grade</th><th>Point</th><th>Remarks</th></tr>
                 </thead>
                 <tbody>
                     <tr><td>80 – 100</td><td>A+</td><td>4.00</td><td>Outstanding</td></tr>
@@ -313,30 +231,25 @@
             <h4>Developed by Minhajul Islam</h4>
             <p>B.Sc. in Computer Science and Engineering, DIU</p>
             <div class="social-links">
-                <a href="https://codeforces.com/profile/NoObMin" target="_blank">
-                    📊 Codeforces: NoObMin
-                </a>
-                <a href="mailto:minhajul.cse.diu@gmail.com">
-                    ✉️ minhajul.cse.diu@gmail.com
-                </a>
+                <a href="https://codeforces.com/profile/NoObMin" target="_blank">📊 Codeforces: NoObMin</a>
+                <a href="mailto:minhajul.cse.diu@gmail.com">✉️ minhajul.cse.diu@gmail.com</a>
             </div>
         </div>
     </div>
 
+    <div id="pdfContainer" style="position: absolute; left: -9999px; top: 0; width: 800px; background: white;"></div>
+
     <script>
-        // ================= THEME LOGIC =================
         function changeTheme(themeName) {
             document.documentElement.setAttribute('data-theme', themeName);
             localStorage.setItem('savedTheme', themeName);
         }
 
-        // Check if user has a saved theme when page loads
         window.onload = () => {
             const savedTheme = localStorage.getItem('savedTheme') || 'light';
             document.getElementById('themeSwitch').value = savedTheme;
             changeTheme(savedTheme);
         };
-        // ===============================================
 
         let semesterCount = 1;
 
@@ -345,17 +258,10 @@
             <div class="grade-wrapper">
                 <select class="flex-1 grade-select" onchange="handleGradeChange(this)" required>
                     <option value="" disabled selected>Select Grade</option>
-                    <option value="4.00">A+ (4.00)</option>
-                    <option value="3.75">A  (3.75)</option>
-                    <option value="3.50">A- (3.50)</option>
-                    <option value="3.25">B+ (3.25)</option>
-                    <option value="3.00">B  (3.00)</option>
-                    <option value="2.75">B- (2.75)</option>
-                    <option value="2.50">C+ (2.50)</option>
-                    <option value="2.25">C  (2.25)</option>
-                    <option value="2.00">D  (2.00)</option>
-                    <option value="0.00">F  (0.00)</option>
-                    <option value="custom">Custom GPA...</option>
+                    <option value="4.00">A+ (4.00)</option><option value="3.75">A  (3.75)</option><option value="3.50">A- (3.50)</option>
+                    <option value="3.25">B+ (3.25)</option><option value="3.00">B  (3.00)</option><option value="2.75">B- (2.75)</option>
+                    <option value="2.50">C+ (2.50)</option><option value="2.25">C  (2.25)</option><option value="2.00">D  (2.00)</option>
+                    <option value="0.00">F  (0.00)</option><option value="custom">Custom GPA...</option>
                 </select>
                 <input type="number" class="flex-1 gpa-input" placeholder="Enter GPA" step="0.01" min="0" max="4.00" style="display:none;">
             </div>
@@ -375,20 +281,11 @@
             const container = document.getElementById('allSemestersContainer');
             const semesterBlock = document.createElement('div');
             semesterBlock.className = 'semester-block';
-            
             semesterBlock.innerHTML = `
-                <div class="semester-header">
-                    <h3 class="semester-title">Semester ${semesterCount}</h3>
-                    <button class="remove-btn btn-sm" onclick="removeSemester(this)" title="Remove Semester">Delete Semester</button>
-                </div>
-                <div class="subjects-container">
-                    <div class="row subject-row">
-                        ${subjectTemplate}
-                    </div>
-                </div>
+                <div class="semester-header"><h3 class="semester-title">Semester ${semesterCount}</h3><button class="remove-btn btn-sm" onclick="removeSemester(this)" title="Remove Semester">Delete Semester</button></div>
+                <div class="subjects-container"><div class="row subject-row">${subjectTemplate}</div></div>
                 <button class="btn-outline btn-sm" onclick="addSubject(this)" style="margin-top: 0.5rem;">+ Add Subject</button>
             `;
-            
             container.appendChild(semesterBlock);
             updateSemesterTitles();
         }
@@ -403,25 +300,15 @@
             blocks.forEach((block, index) => {
                 block.querySelector('.semester-title').innerText = `Semester ${index + 1}`;
                 const deleteBtn = block.querySelector('.semester-header .remove-btn');
-                if (blocks.length === 1) {
-                    deleteBtn.style.display = 'none';
-                } else {
-                    deleteBtn.style.display = 'block';
-                }
+                if (blocks.length === 1) deleteBtn.style.display = 'none'; else deleteBtn.style.display = 'block';
             });
             semesterCount = blocks.length;
         }
 
         function handleGradeChange(selectElement) {
             const customInput = selectElement.nextElementSibling;
-            if (selectElement.value === 'custom') {
-                customInput.style.display = 'block';
-                customInput.required = true;
-                selectElement.style.display = 'none'; 
-            } else {
-                customInput.style.display = 'none';
-                customInput.required = false;
-            }
+            if (selectElement.value === 'custom') { customInput.style.display = 'block'; customInput.required = true; selectElement.style.display = 'none'; } 
+            else { customInput.style.display = 'none'; customInput.required = false; }
         }
 
         function calculateCGPA() {
@@ -430,67 +317,165 @@
 
             let globalTotalPoints = (prevCgpa * prevCredits);
             let globalTotalCredits = prevCredits;
-            
             let semesterResultsHTML = "";
             let anyValidInput = false;
 
             const semesterBlocks = document.querySelectorAll('.semester-block');
-
             semesterBlocks.forEach((block, index) => {
-                let semesterPoints = 0;
-                let semesterCredits = 0;
+                let semesterPoints = 0; let semesterCredits = 0;
                 const rows = block.querySelectorAll('.subject-row');
-
                 rows.forEach(row => {
                     const credit = parseFloat(row.querySelector('.credit-input').value);
                     const selectElement = row.querySelector('.grade-select');
                     const customInput = row.querySelector('.gpa-input');
-                    
-                    let gpa;
-                    if (selectElement.value === 'custom') {
-                        gpa = parseFloat(customInput.value);
-                    } else {
-                        gpa = parseFloat(selectElement.value);
-                    }
+                    let gpa = selectElement.value === 'custom' ? parseFloat(customInput.value) : parseFloat(selectElement.value);
 
                     if (!isNaN(credit) && !isNaN(gpa)) {
-                        semesterPoints += (credit * gpa);
-                        semesterCredits += credit;
-                        anyValidInput = true;
+                        semesterPoints += (credit * gpa); semesterCredits += credit; anyValidInput = true;
                     }
                 });
 
                 if (semesterCredits > 0) {
                     const sgpa = semesterPoints / semesterCredits;
                     semesterResultsHTML += `<p>Semester ${index + 1} SGPA: <strong style="color:var(--primary)">${sgpa.toFixed(2)}</strong> (Credits: ${semesterCredits})</p>`;
-                    
-                    globalTotalPoints += semesterPoints;
-                    globalTotalCredits += semesterCredits;
+                    globalTotalPoints += semesterPoints; globalTotalCredits += semesterCredits;
                 }
             });
 
             const resultBox = document.getElementById('resultBox');
-            
             if (!anyValidInput && prevCredits === 0) {
-                resultBox.style.display = 'block';
-                resultBox.style.borderLeftColor = 'var(--danger)';
-                resultBox.innerHTML = '<p style="color: var(--danger); margin:0;">Please enter valid credits and grades to calculate.</p>';
+                resultBox.style.display = 'block'; resultBox.style.borderLeftColor = 'var(--danger)';
+                resultBox.innerHTML = '<p style="color: var(--danger); margin:0;">Please enter valid credits and grades.</p>';
+                document.getElementById('downloadPdfBtn').style.display = 'none';
                 return;
             }
 
             const finalCgpa = globalTotalCredits > 0 ? (globalTotalPoints / globalTotalCredits) : 0;
 
-            resultBox.style.display = 'block';
-            resultBox.style.borderLeftColor = 'var(--primary)';
-            
+            resultBox.style.display = 'block'; resultBox.style.borderLeftColor = 'var(--primary)';
             let finalHTML = "";
-            if (semesterResultsHTML !== "") {
-                finalHTML += `<div class="semester-sgpa-list">${semesterResultsHTML}</div>`;
-            }
+            if (semesterResultsHTML !== "") finalHTML += `<div class="semester-sgpa-list">${semesterResultsHTML}</div>`;
             finalHTML += `<p>Total Credits Completed: <strong>${globalTotalCredits.toFixed(2)}</strong></p>`;
             finalHTML += `<p class="highlight">Overall Final CGPA: ${finalCgpa.toFixed(2)}</p>`;
-            
             resultBox.innerHTML = finalHTML;
+
+            // Show the download button
+            document.getElementById('downloadPdfBtn').style.display = 'block';
+        }
+
+        // ================= PDF GENERATION LOGIC =================
+        function generatePDF() {
+            // Get Student Info
+            const name = document.getElementById('studentName').value || 'N/A';
+            const studentId = document.getElementById('studentId').value || 'N/A';
+            const date = new Date().toLocaleDateString();
+
+            // Build a formal HTML template just for the PDF
+            let pdfHtml = `
+                <div style="padding: 40px; font-family: Arial, sans-serif; color: #000; background: #fff;">
+                    <div style="text-align: center; border-bottom: 2px solid #000; margin-bottom: 20px; padding-bottom: 10px;">
+                        <h1 style="margin: 0; color: #004b99;">Daffodil International University</h1>
+                        <h2 style="margin: 5px 0; color: #333;">Academic Transcript (Unofficial)</h2>
+                    </div>
+                    <div style="margin-bottom: 30px; display: flex; justify-content: space-between;">
+                        <div>
+                            <p style="margin: 5px 0;"><strong>Student Name:</strong> ${name}</p>
+                            <p style="margin: 5px 0;"><strong>Student ID:</strong> ${studentId}</p>
+                        </div>
+                        <div>
+                            <p style="margin: 5px 0;"><strong>Date Generated:</strong> ${date}</p>
+                        </div>
+                    </div>
+            `;
+
+            // Previous Results
+            const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0;
+            const prevCredits = parseFloat(document.getElementById('prevCredits').value) || 0;
+            if (prevCredits > 0) {
+                pdfHtml += `<div style="background: #f4f4f4; padding: 10px; margin-bottom: 20px; border-radius: 4px;">
+                                <strong>Previous Record:</strong> Completed ${prevCredits} Credits with a CGPA of ${prevCgpa.toFixed(2)}
+                            </div>`;
+            }
+
+            let globalTotalPoints = (prevCgpa * prevCredits);
+            let globalTotalCredits = prevCredits;
+
+            // Loop through Semesters to build tables
+            const semesterBlocks = document.querySelectorAll('.semester-block');
+            semesterBlocks.forEach((block, index) => {
+                let semesterPoints = 0; let semesterCredits = 0;
+                let tableRows = '';
+
+                const rows = block.querySelectorAll('.subject-row');
+                rows.forEach((row, subIndex) => {
+                    const credit = parseFloat(row.querySelector('.credit-input').value);
+                    const selectElement = row.querySelector('.grade-select');
+                    const customInput = row.querySelector('.gpa-input');
+                    
+                    let gradeText = selectElement.options[selectElement.selectedIndex].text;
+                    let gpa = selectElement.value === 'custom' ? parseFloat(customInput.value) : parseFloat(selectElement.value);
+                    if(selectElement.value === 'custom') gradeText = 'Custom';
+
+                    if (!isNaN(credit) && !isNaN(gpa)) {
+                        semesterPoints += (credit * gpa); semesterCredits += credit;
+                        tableRows += `<tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Subject ${subIndex + 1}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${credit}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${gpa.toFixed(2)} (${gradeText})</td>
+                        </tr>`;
+                    }
+                });
+
+                if (semesterCredits > 0) {
+                    const sgpa = semesterPoints / semesterCredits;
+                    globalTotalPoints += semesterPoints; globalTotalCredits += semesterCredits;
+
+                    pdfHtml += `
+                        <h3 style="margin-bottom: 10px; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Semester ${index + 1} (SGPA: ${sgpa.toFixed(2)})</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
+                            <thead style="background: #eee;">
+                                <tr>
+                                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Subject</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Credit</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">GPA Acquired</th>
+                                </tr>
+                            </thead>
+                            <tbody>${tableRows}</tbody>
+                        </table>
+                    `;
+                }
+            });
+
+            const finalCgpa = globalTotalCredits > 0 ? (globalTotalPoints / globalTotalCredits) : 0;
+
+            // Final Result Section
+            pdfHtml += `
+                <div style="margin-top: 30px; padding: 20px; background: #eef5fa; border-left: 5px solid #004b99; border-radius: 4px;">
+                    <h3 style="margin: 0 0 10px 0; color: #004b99;">Final Calculation</h3>
+                    <p style="margin: 5px 0; font-size: 16px;">Total Credits Completed: <strong>${globalTotalCredits.toFixed(2)}</strong></p>
+                    <p style="margin: 5px 0; font-size: 20px;">Overall Final CGPA: <strong style="color: #004b99;">${finalCgpa.toFixed(2)}</strong></p>
+                </div>
+                
+                <div style="margin-top: 50px; text-align: center; font-size: 12px; color: #777;">
+                    <p>Generated by DIU CGPA Calculator (Developed by Minhajul Islam)</p>
+                </div>
+            </div>`;
+
+            // Insert into hidden container
+            const pdfContainer = document.getElementById('pdfContainer');
+            pdfContainer.innerHTML = pdfHtml;
+
+            // Configure and save PDF
+            const opt = {
+                margin:       [0.5, 0.5, 0.5, 0.5],
+                filename:     `${studentId !== 'N/A' ? studentId : 'Student'}_DIU_Marksheet.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Call the library to download
+            html2pdf().set(opt).from(pdfContainer).save();
         }
     </script>
 </body>

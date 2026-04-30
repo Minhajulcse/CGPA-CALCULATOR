@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced DIU CGPA Calculator</title>
     
     <meta name="description" content="A fast and easy CGPA and SGPA calculator for university students. Calculate multiple semesters instantly. Developed by Minhajul Islam.">
@@ -17,11 +17,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* GLOBAL RESET FOR MOBILE SIZING */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
         /* THEMES */
         :root {
             --primary: #0070f3; --primary-hover: #0051a2; --success: #17c964; --success-hover: #12a150;
@@ -55,18 +50,13 @@
         h3 { font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 1.5rem; color: var(--text); }
         
         .theme-selector select { padding: 0.4rem 0.8rem; border-radius: 20px; cursor: pointer; font-weight: bold; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text); }
-        .row { display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: center; width: 100%; }
-        
-        input, select, textarea { padding: 0.75rem; border: 1px solid var(--input-border); border-radius: 6px; font-size: 0.95rem; background-color: var(--input-bg); color: var(--text); transition: all 0.3s ease; width: 100%; }
-        textarea { resize: vertical; min-height: 60px; font-family: monospace; font-size: 0.85rem; }
+        .row { display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: center; }
+        input, select, textarea { padding: 0.75rem; border: 1px solid var(--input-border); border-radius: 6px; font-size: 0.95rem; box-sizing: border-box; background-color: var(--input-bg); color: var(--text); transition: all 0.3s ease; }
+        textarea { width: 100%; resize: vertical; min-height: 60px; font-family: monospace; font-size: 0.85rem; }
         ::placeholder { color: var(--text-muted); opacity: 0.6; }
-        
-        .flex-1 { flex: 1; } 
-        .flex-2 { flex: 2; } 
-        .flex-3 { flex: 3; }
-        .grade-wrapper { flex: 1.5; display: flex; gap: 0.5rem; width: 100%; }
+        .flex-1 { flex: 1; width: 100%; } .flex-2 { flex: 2; width: 100%; } .flex-3 { flex: 3; width: 100%; }
 
-        button { padding: 0.75rem 1rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s, transform 0.1s; text-align: center; }
+        button { padding: 0.75rem 1rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s, transform 0.1s; }
         button:hover { background: var(--primary-hover); } button:active { transform: scale(0.98); }
         .btn-outline { background: transparent; color: var(--primary); border: 2px dashed var(--primary); width: 100%; }
         .btn-outline:hover { background: var(--result-bg); }
@@ -75,7 +65,6 @@
         .btn-success { background: var(--success); } .btn-success:hover { background: var(--success-hover); }
         .btn-warning { background: var(--warning); color: #fff; width: 100%; margin-top: 0.5rem; padding: 0.5rem; font-size: 0.9rem;}
         .btn-warning:hover { background: var(--warning-hover); }
-        .btn-secondary { background: #888; color: white; } .btn-secondary:hover { background: #666; }
 
         .semester-block { background: var(--semester-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; position: relative; }
         .semester-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
@@ -85,13 +74,13 @@
         .magic-extract-section { background: var(--card-bg); border: 1px dashed var(--border-color); padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; }
 
         .result { margin-top: 1.5rem; padding: 1.25rem; background: var(--result-bg); border-left: 4px solid var(--primary); border-radius: 4px; display: none; }
-        .result p { margin: 0.5rem 0; color: var(--text); overflow-wrap: break-word;}
+        .result p { margin: 0.5rem 0; color: var(--text); }
         .result .highlight { font-size: 1.25rem; font-weight: bold; color: var(--primary); margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;}
         
         .planner-card { background: var(--card-bg); padding: 1.5rem; border-radius: 8px; border: 2px dashed var(--warning); margin-top: 1.5rem; display: none; }
-        .chart-container { margin-top: 2rem; padding: 1rem; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-color); width: 100%; overflow: hidden;}
+        .chart-container { margin-top: 2rem; padding: 1rem; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-color); }
 
-        .reference-section { margin-top: 3rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .reference-section { margin-top: 3rem; overflow-x: auto; }
         .reference-table { width: 100%; border-collapse: collapse; min-width: 500px; font-size: 0.9rem; margin-top: 1rem; }
         .reference-table th, .reference-table td { border: 1px solid var(--border-color); padding: 10px; text-align: center; color: var(--text); }
         .reference-table th { background-color: var(--primary); color: var(--table-head-text); font-weight: 600; }
@@ -105,24 +94,7 @@
         .social-links a { text-decoration: none; color: var(--text); background: var(--card-bg); padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 500; border: 1px solid var(--border-color); transition: all 0.3s ease; }
         .social-links a:hover { background: var(--primary); color: white; border-color: var(--primary); }
         
-        /* ================= MOBILE RESPONSIVE FIXES ================= */
-        @media (max-width: 768px) { 
-            body { margin: 0; padding: 0.5rem; }
-            .card { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
-            .row { flex-direction: column; align-items: stretch; gap: 0.5rem; } 
-            
-            .header-section { flex-direction: column; text-align: center; gap: 1rem; }
-            h2 { font-size: 1.4rem; }
-            
-            .semester-block { padding: 1rem; }
-            .semester-header { flex-direction: column; align-items: stretch; gap: 0.5rem; }
-            .semester-name-input { max-width: 100%; margin-right: 0; text-align: center; }
-            
-            .social-links { flex-direction: column; align-items: stretch; }
-            .social-links a { text-align: center; }
-            
-            .chart-container { padding: 0.5rem; }
-        }
+        @media (max-width: 768px) { .row { flex-direction: column; align-items: stretch; gap: 0.5rem; } }
 
         /* ================= THE BULLETPROOF PRINT STYLES ================= */
         #printArea { display: none; } 
@@ -167,7 +139,7 @@
         </div>
 
         <!-- CSV Import / Export -->
-        <div class="row" style="margin-bottom: 1.5rem;">
+        <div class="row" style="margin-bottom: 1.5rem; justify-content: flex-end;">
             <button class="btn-outline flex-1 btn-sm" onclick="exportCSV()">📥 Export Data (.CSV)</button>
             <input type="file" id="importFile" style="display:none;" accept=".csv" onchange="importCSV(event)">
             <button class="btn-outline flex-1 btn-sm" onclick="document.getElementById('importFile').click()">📤 Import Data (.CSV)</button>
@@ -271,7 +243,7 @@
             <input type="text" class="flex-1 course-code-input save-trigger" placeholder="Course Code (Opt)" value="${cCode}">
             <input type="text" class="flex-3 course-title-input save-trigger" placeholder="Course Title (Opt)" value="${cTitle}">
             <input type="number" class="flex-1 credit-input save-trigger" placeholder="Credit" step="0.5" min="0" value="${credit}" required>
-            <div class="grade-wrapper">
+            <div style="flex:1.5; display:flex; gap:0.5rem; width:100%;">
                 <select class="flex-1 grade-select save-trigger" onchange="handleGradeChange(this)" required>
                     <option value="" disabled ${dropdownVal===''?'selected':''}>Grade (Req)</option>
                     <option value="4.00" ${dropdownVal==='4.00'?'selected':''}>A+ (4.00)</option><option value="3.75" ${dropdownVal==='3.75'?'selected':''}>A  (3.75)</option>
@@ -477,7 +449,6 @@
                 },
                 options: { 
                     responsive: true,
-                    maintainAspectRatio: false,
                     plugins: { 
                         legend: { labels: { color: textColor } },
                         tooltip: { mode: 'index', intersect: false }

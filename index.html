@@ -381,7 +381,14 @@
             const textarea = block.querySelector('.magic-textarea');
             const container = block.querySelector('.subjects-container');
             const rawText = textarea.value;
-            if (!rawText.trim()) return alert("Please paste some text into the box first!");
+            const toast = document.getElementById('welcomeToast');
+
+            if (!rawText.trim()) {
+                toast.innerHTML = "⚠️ Please paste some text into the box first!";
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+                return;
+            }
 
             const regex = /(?:^|\n)?(?:\d+\s+)?([A-Za-z]{3,4}\s*\d{3,4})\s+(.+?)\s+(\d+(?:\.\d+)?)\s+([A-D][+-]?|F)\s+(\d+(?:\.\d+)?)/gm;
             let match, count = 0;
@@ -397,8 +404,18 @@
                     dropdownVal: isStandard ? gpaVal : 'custom', gpa: isStandard ? '' : gpaVal
                 }); count++;
             }
-            if (count === 0) return alert("Could not find any matching grades in the text. Make sure it matches DIU format.");
+            
+            if (count === 0) {
+                toast.innerHTML = "❌ Could not find any grades. Make sure it matches DIU format!";
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3500);
+                return;
+            }
+            
             textarea.value = ""; calculateCGPA(); saveData();
+            toast.innerHTML = `✨ Magic! Successfully extracted ${count} subjects!`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         function calculateCGPA() {
@@ -559,6 +576,7 @@
         });
 
         function generatePDF() {
+            document.getElementById('welcomeToast').style.display = 'none';
             const finalCgpa = globalStats.currentCredits > 0 ? (globalStats.currentPoints / globalStats.currentCredits) : 0;
             const dateStr = new Date().toLocaleDateString('en-GB');
             let semestersHtml = '';
@@ -587,6 +605,7 @@
                 <div class="print-footer avoid-break">This document has been generated electronically and is valid without a physical signature.</div>
             `;
             window.print();
+            setTimeout(() => { document.getElementById('welcomeToast').style.display = ''; }, 2000);
         }
     </script>
     <script>

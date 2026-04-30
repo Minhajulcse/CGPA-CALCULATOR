@@ -3,72 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIU Auto-Extract CGPA Calculator | Minhajul</title>
+    <title>Advanced DIU CGPA Calculator</title>
     
     <meta name="description" content="A fast and easy CGPA and SGPA calculator for university students. Calculate multiple semesters instantly. Developed by Minhajul Islam.">
     <meta name="keywords" content="CGPA calculator, DIU CGPA calculator, university grade calculator, SGPA calculator, Minhajul Islam">
-    <meta name="author" content="Minhajul Islam">
+    
+    <!-- External Libraries for Chart and PDF -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* LIGHT THEME (Default) */
+        /* THEMES */
         :root {
             --primary: #0070f3; --primary-hover: #0051a2; --success: #17c964; --success-hover: #12a150;
             --danger: #ff4d4f; --danger-hover: #cf1322; --warning: #f5a623; --warning-hover: #d48a1c;
             --bg: #f4f4f9; --card-bg: #ffffff; --text: #333333; --text-muted: #666666; 
             --border-color: #eeeeee; --input-bg: #ffffff; --input-border: #cccccc; 
             --semester-bg: #fafafa; --result-bg: #e6f7ff; --table-head-text: #ffffff;
-            --table-even: #f9f9f9; --table-hover: #f1f1f1;
+            --table-even: #f9f9f9; --table-hover: #f1f1f1; --chart-line: #0070f3; --chart-bg: rgba(0, 112, 243, 0.1);
         }
-
-        /* DARK THEME */
         [data-theme="dark"] {
             --primary: #3291ff; --primary-hover: #0070f3; --success: #17c964; --success-hover: #12a150;
             --danger: #ff6b6b; --danger-hover: #fa5252; --warning: #f5a623; --warning-hover: #d48a1c;
             --bg: #121212; --card-bg: #1e1e1e; --text: #ededed; --text-muted: #a0a0a0; 
             --border-color: #333333; --input-bg: #2a2a2a; --input-border: #444444; 
             --semester-bg: #252525; --result-bg: rgba(50, 145, 255, 0.1); --table-head-text: #ffffff;
-            --table-even: #2a2a2a; --table-hover: #333333;
+            --table-even: #2a2a2a; --table-hover: #333333; --chart-line: #3291ff; --chart-bg: rgba(50, 145, 255, 0.1);
         }
-
-        /* OCEAN THEME */
         [data-theme="ocean"] {
             --primary: #00d2ff; --primary-hover: #3a7bd5; --success: #00b09b; --success-hover: #008a7a;
             --danger: #ff4b2b; --danger-hover: #ff416c; --warning: #f1c40f; --warning-hover: #f39c12;
             --bg: #0f2027; --card-bg: #203a43; --text: #ffffff; --text-muted: #b0c4de; 
             --border-color: #2c5364; --input-bg: #152b36; --input-border: #2c5364; 
             --semester-bg: #182f3a; --result-bg: rgba(0, 210, 255, 0.1); --table-head-text: #ffffff;
-            --table-even: #1a323d; --table-hover: #2c5364;
+            --table-even: #1a323d; --table-hover: #2c5364; --chart-line: #00d2ff; --chart-bg: rgba(0, 210, 255, 0.1);
         }
 
         body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); max-width: 900px; margin: 2rem auto; padding: 1rem; line-height: 1.5; transition: all 0.3s ease; }
-        .card { background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .card { background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 2rem;}
         .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         h2 { margin: 0; color: var(--primary); }
         h3 { font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 1.5rem; color: var(--text); }
         
         .theme-selector select { padding: 0.4rem 0.8rem; border-radius: 20px; cursor: pointer; font-weight: bold; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text); }
-
         .row { display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: center; }
         input, select, textarea { padding: 0.75rem; border: 1px solid var(--input-border); border-radius: 6px; font-size: 0.95rem; box-sizing: border-box; background-color: var(--input-bg); color: var(--text); transition: all 0.3s ease; }
         textarea { width: 100%; resize: vertical; min-height: 60px; font-family: monospace; font-size: 0.85rem; }
         ::placeholder { color: var(--text-muted); opacity: 0.6; }
-        
-        .flex-1 { flex: 1; width: 100%; }
-        .flex-2 { flex: 2; width: 100%; } 
-        .flex-3 { flex: 3; width: 100%; }
+        .flex-1 { flex: 1; width: 100%; } .flex-2 { flex: 2; width: 100%; } .flex-3 { flex: 3; width: 100%; }
 
         button { padding: 0.75rem 1rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s, transform 0.1s; }
-        button:hover { background: var(--primary-hover); }
-        button:active { transform: scale(0.98); }
+        button:hover { background: var(--primary-hover); } button:active { transform: scale(0.98); }
         .btn-outline { background: transparent; color: var(--primary); border: 2px dashed var(--primary); width: 100%; }
         .btn-outline:hover { background: var(--result-bg); }
         .btn-sm { padding: 0.5rem; font-size: 0.9rem; }
-        .remove-btn { background: var(--danger); padding: 0.75rem; }
-        .remove-btn:hover { background: var(--danger-hover); }
-        .btn-success { background: var(--success); }
-        .btn-success:hover { background: var(--success-hover); }
+        .remove-btn { background: var(--danger); padding: 0.75rem; } .remove-btn:hover { background: var(--danger-hover); }
+        .btn-success { background: var(--success); } .btn-success:hover { background: var(--success-hover); }
         .btn-warning { background: var(--warning); color: #fff; width: 100%; margin-top: 0.5rem; padding: 0.5rem; font-size: 0.9rem;}
         .btn-warning:hover { background: var(--warning-hover); }
+        .btn-secondary { background: #888; color: white; } .btn-secondary:hover { background: #666; }
 
         .semester-block { background: var(--semester-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; position: relative; }
         .semester-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
@@ -80,8 +72,10 @@
         .result { margin-top: 1.5rem; padding: 1.25rem; background: var(--result-bg); border-left: 4px solid var(--primary); border-radius: 4px; display: none; }
         .result p { margin: 0.5rem 0; color: var(--text); }
         .result .highlight { font-size: 1.25rem; font-weight: bold; color: var(--primary); margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;}
+        
+        .planner-card { background: var(--card-bg); padding: 1.5rem; border-radius: 8px; border: 2px dashed var(--warning); margin-top: 1.5rem; display: none; }
+        .chart-container { margin-top: 2rem; padding: 1rem; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-color); }
 
-        /* UGC Grading Table UI Styles */
         .reference-section { margin-top: 3rem; overflow-x: auto; }
         .reference-table { width: 100%; border-collapse: collapse; min-width: 500px; font-size: 0.9rem; margin-top: 1rem; }
         .reference-table th, .reference-table td { border: 1px solid var(--border-color); padding: 10px; text-align: center; color: var(--text); }
@@ -98,50 +92,31 @@
         
         @media (max-width: 768px) { .row { flex-direction: column; align-items: stretch; gap: 0.5rem; } }
 
-        /* ================= THE BULLETPROOF PRINT STYLES (DIU Official Layout) ================= */
+        /* ================= THE BULLETPROOF PRINT STYLES ================= */
         #printArea { display: none; } 
         @media print {
             body { background: white !important; margin: 0 !important; padding: 0 !important; font-family: 'Times New Roman', Times, serif; }
             .card { display: none !important; }
-            #printArea { display: flex !important; flex-direction: column; min-height: 98vh; width: 100%; color: #000 !important; }
+            #printArea { display: block !important; width: 100%; color: #000 !important; }
             #printArea * { color: #000 !important; text-shadow: none !important; box-sizing: border-box; }
-            
             .avoid-break { page-break-inside: avoid; break-inside: avoid; }
-            
             .print-header { text-align: center; margin-bottom: 20px; }
             .print-header h1 { margin: 0; font-size: 24px; font-weight: bold; }
             .print-header p { margin: 2px 0; font-size: 11px; }
             .print-header h2 { text-decoration: underline; font-size: 18px; margin: 15px 0 20px 0; }
-
             .info-grid { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 20px; }
-            .info-left { width: 55%; }
-            .info-right { width: 40%; }
-            .info-table { width: 100%; border-collapse: collapse; }
-            .info-table td { padding: 3px 0; vertical-align: top; }
-            .info-table td:first-child { width: 140px; font-weight: bold; }
-
-            .summary-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-            .summary-table td { border: 1px solid #000; padding: 5px; }
-
+            .info-left { width: 55%; } .info-right { width: 40%; }
+            .info-table { width: 100%; border-collapse: collapse; } .info-table td { padding: 3px 0; vertical-align: top; } .info-table td:first-child { width: 140px; font-weight: bold; }
+            .summary-table { width: 100%; border-collapse: collapse; margin-top: 5px; } .summary-table td { border: 1px solid #000; padding: 5px; }
             .grading-section { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 30px; }
-            .grading-table { border-collapse: collapse; width: 60%; }
-            .grading-table th, .grading-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; }
-            
+            .grading-table { border-collapse: collapse; width: 60%; } .grading-table th, .grading-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; }
             .semester-print-block { margin-bottom: 20px; font-size: 11px; }
             .semester-print-header { font-weight: bold; margin-bottom: 5px; }
             .semester-print-table { width: 100%; border-collapse: collapse; }
             .semester-print-table th, .semester-print-table td { border: 1px solid #000; padding: 5px; text-align: left; }
             .semester-print-table th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .text-center { text-align: center !important; }
-
-            .print-footer { 
-                margin-top: auto !important; 
-                text-align: center; 
-                font-size: 11px; 
-                border-top: 1px dashed #000; 
-                padding-top: 15px; 
-                padding-bottom: 10px; 
-            }
+            .print-footer { margin-top: 40px; text-align: center; font-size: 11px; font-style: italic; }
         }
     </style>
 </head>
@@ -149,7 +124,7 @@
 
     <div class="card" id="mainInterface">
         <div class="header-section">
-            <h2>DIU Auto-Extract CGPA Calculator</h2>
+            <h2>Advanced DIU CGPA Calculator</h2>
             <div class="theme-selector">
                 <select id="themeSwitch" onchange="changeTheme(this.value)">
                     <option value="light">☀️ Light Theme</option>
@@ -159,59 +134,32 @@
             </div>
         </div>
 
+        <!-- CSV Import / Export -->
+        <div class="row" style="margin-bottom: 1.5rem; justify-content: flex-end;">
+            <button class="btn-outline flex-1 btn-sm" onclick="exportCSV()">📥 Export Data (.CSV)</button>
+            <input type="file" id="importFile" style="display:none;" accept=".csv" onchange="importCSV(event)">
+            <button class="btn-outline flex-1 btn-sm" onclick="document.getElementById('importFile').click()">📤 Import Data (.CSV)</button>
+        </div>
+
         <h3>Student Details (For Official Transcript)</h3>
         <div class="row">
-            <input type="text" id="studentName" class="flex-1" placeholder="Your Name (Optional)">
-            <input type="text" id="studentId" class="flex-1" placeholder="Student ID (Optional)">
+            <input type="text" id="studentName" class="flex-1 save-trigger" placeholder="Your Name (Optional)">
+            <input type="text" id="studentId" class="flex-1 save-trigger" placeholder="Student ID (Optional)">
         </div>
         <div class="row">
-            <input type="text" id="programName" class="flex-2" placeholder="Program (Default: 4-Year B.Sc. in Computer Science & Engineering)">
-            <input type="text" id="enrollmentSession" class="flex-1" placeholder="Session (e.g., Spring 2023)">
-            <input type="text" id="batchNo" class="flex-1" placeholder="Batch (e.g., 61)">
+            <input type="text" id="programName" class="flex-2 save-trigger" placeholder="Program (Default: 4-Year B.Sc. in Computer Science & Engineering)">
+            <input type="text" id="enrollmentSession" class="flex-1 save-trigger" placeholder="Session (e.g., Spring 2023)">
+            <input type="text" id="batchNo" class="flex-1 save-trigger" placeholder="Batch (e.g., 61)">
         </div>
 
         <h3>Previous Results (Optional)</h3>
         <div class="row">
-            <input type="number" id="prevCgpa" class="flex-1" placeholder="Overall Previous CGPA (e.g., 3.80)" step="0.01" min="0" max="4.00">
-            <input type="number" id="prevCredits" class="flex-1" placeholder="Total Previous Credits (e.g., 45)" step="0.5" min="0">
+            <input type="number" id="prevCgpa" class="flex-1 save-trigger" placeholder="Overall Previous CGPA (e.g., 3.80)" step="0.01" min="0" max="4.00">
+            <input type="number" id="prevCredits" class="flex-1 save-trigger" placeholder="Total Previous Credits (e.g., 45)" step="0.5" min="0">
         </div>
 
         <h3>Semesters</h3>
-        <div id="allSemestersContainer">
-            <!-- Initial Semester Block -->
-            <div class="semester-block">
-                <div class="semester-header">
-                    <input type="text" class="semester-name-input" placeholder="Semester 1 (Optional)">
-                    <button class="remove-btn btn-sm" onclick="removeSemester(this)" style="display:none;">Delete</button>
-                </div>
-                
-                <div class="magic-extract-section">
-                    <p style="margin-top:0; margin-bottom:0.5rem; font-size:0.9rem; font-weight:bold; color:var(--primary);">✨ Magic Extract</p>
-                    <textarea class="magic-textarea" placeholder="Paste text here... (e.g. 1 CSE222 Object Oriented Programming Lab 1.50 A+ 4.00)"></textarea>
-                    <button class="btn-warning btn-sm" onclick="extractText(this)">Extract & Auto-Fill Semester</button>
-                </div>
-
-                <div class="subjects-container">
-                    <div class="row subject-row">
-                        <input type="text" class="flex-1 course-code-input" placeholder="Course Code (Opt)">
-                        <input type="text" class="flex-3 course-title-input" placeholder="Course Title (Opt)">
-                        <input type="number" class="flex-1 credit-input" placeholder="Credit (Req)" step="0.5" min="0" required>
-                        <div style="flex:1.5; display:flex; gap:0.5rem; width:100%;">
-                            <select class="flex-1 grade-select" onchange="handleGradeChange(this)" required>
-                                <option value="" disabled selected>Grade (Req)</option>
-                                <option value="4.00">A+ (4.00)</option><option value="3.75">A  (3.75)</option><option value="3.50">A- (3.50)</option>
-                                <option value="3.25">B+ (3.25)</option><option value="3.00">B  (3.00)</option><option value="2.75">B- (2.75)</option>
-                                <option value="2.50">C+ (2.50)</option><option value="2.25">C  (2.25)</option><option value="2.00">D  (2.00)</option>
-                                <option value="0.00">F  (0.00)</option><option value="custom">Custom...</option>
-                            </select>
-                            <input type="number" class="flex-1 gpa-input" placeholder="GPA" step="0.01" min="0" max="4.00" style="display:none;">
-                        </div>
-                        <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
-                    </div>
-                </div>
-                <button class="btn-outline btn-sm" onclick="addSubject(this)">+ Add Subject Manually</button>
-            </div>
-        </div>
+        <div id="allSemestersContainer"></div>
 
         <button class="btn-outline" onclick="addSemester()">+ Add Another Semester Block</button>
         
@@ -222,15 +170,31 @@
             <button id="downloadPdfBtn" class="btn-success" onclick="generatePDF()" style="display:none; flex: 1; font-size: 1.1rem; padding: 1rem;">🖨️ Print Transcript</button>
         </div>
 
+        <!-- Enhanced Chart Section -->
+        <div id="chartSection" class="chart-container" style="display:none;">
+            <h3 style="margin-top:0; text-align:center;">📈 SGPA vs. Cumulative CGPA Trend</h3>
+            <canvas id="sgpaChart" height="80"></canvas>
+        </div>
+
+        <!-- Main Result Box -->
         <div id="resultBox" class="result"></div>
 
-        <!-- UGC Grading System UI Table -->
+        <!-- Goal Planner -->
+        <div id="goalPlanner" class="planner-card">
+            <h3 style="color: var(--warning); margin-top:0;">🎯 Target CGPA Planner</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Enter your dream CGPA to see what you need to score next semester.</p>
+            <div class="row">
+                <input type="number" id="targetCgpa" class="flex-1" placeholder="Target CGPA (e.g., 3.85)" step="0.01" min="0" max="4.00">
+                <input type="number" id="targetCredits" class="flex-1" placeholder="Credits Taking Next Sem (e.g., 15)" step="0.5" min="0">
+                <button class="btn-warning" style="margin-top:0; width:auto;" onclick="calculateGoal()">Plan</button>
+            </div>
+            <div id="goalResult" style="font-weight:bold; margin-top: 1rem;"></div>
+        </div>
+
         <div class="reference-section">
             <h3>UGC Uniform Grading System</h3>
             <table class="reference-table">
-                <thead>
-                    <tr><th>Marks (%)</th><th>Letter Grade</th><th>Grade Point</th><th>Remarks</th></tr>
-                </thead>
+                <thead><tr><th>Marks (%)</th><th>Letter Grade</th><th>Grade Point</th><th>Remarks</th></tr></thead>
                 <tbody>
                     <tr><td>80 - 100</td><td>A+</td><td>4.00</td><td>Outstanding</td></tr>
                     <tr><td>75 - 79</td><td>A</td><td>3.75</td><td>Excellent</td></tr>
@@ -256,116 +220,57 @@
         </div>
     </div>
 
-    <!-- Print Layout -->
     <div id="printArea"></div>
 
     <script>
+        // ================= GLOBAL VARIABLES & THEME =================
+        let semesterCount = 0;
+        let myChart = null;
+        let globalStats = { currentPoints: 0, currentCredits: 0, currentCgpa: 0 };
+
         function changeTheme(themeName) {
             document.documentElement.setAttribute('data-theme', themeName);
             localStorage.setItem('savedTheme', themeName);
+            if(myChart) calculateCGPA(); // Redraw chart to match theme colors
         }
-        window.onload = () => { changeTheme(localStorage.getItem('savedTheme') || 'light'); };
 
-        // Standard Row Template
-        const subjectTemplate = `
-            <input type="text" class="flex-1 course-code-input" placeholder="Course Code (Opt)">
-            <input type="text" class="flex-3 course-title-input" placeholder="Course Title (Opt)">
-            <input type="number" class="flex-1 credit-input" placeholder="Credit (Req)" step="0.5" min="0" required>
+        // ================= TEMPLATES =================
+        const getSubjectHtml = (cCode='', cTitle='', credit='', dropdownVal='', gpa='') => `
+            <input type="text" class="flex-1 course-code-input save-trigger" placeholder="Course Code (Opt)" value="${cCode}">
+            <input type="text" class="flex-3 course-title-input save-trigger" placeholder="Course Title (Opt)" value="${cTitle}">
+            <input type="number" class="flex-1 credit-input save-trigger" placeholder="Credit" step="0.5" min="0" value="${credit}" required>
             <div style="flex:1.5; display:flex; gap:0.5rem; width:100%;">
-                <select class="flex-1 grade-select" onchange="handleGradeChange(this)" required>
-                    <option value="" disabled selected>Grade (Req)</option>
-                    <option value="4.00">A+ (4.00)</option><option value="3.75">A  (3.75)</option><option value="3.50">A- (3.50)</option>
-                    <option value="3.25">B+ (3.25)</option><option value="3.00">B  (3.00)</option><option value="2.75">B- (2.75)</option>
-                    <option value="2.50">C+ (2.50)</option><option value="2.25">C  (2.25)</option><option value="2.00">D  (2.00)</option>
-                    <option value="0.00">F  (0.00)</option><option value="custom">Custom...</option>
+                <select class="flex-1 grade-select save-trigger" onchange="handleGradeChange(this)" required>
+                    <option value="" disabled ${dropdownVal===''?'selected':''}>Grade (Req)</option>
+                    <option value="4.00" ${dropdownVal==='4.00'?'selected':''}>A+ (4.00)</option><option value="3.75" ${dropdownVal==='3.75'?'selected':''}>A  (3.75)</option>
+                    <option value="3.50" ${dropdownVal==='3.50'?'selected':''}>A- (3.50)</option><option value="3.25" ${dropdownVal==='3.25'?'selected':''}>B+ (3.25)</option>
+                    <option value="3.00" ${dropdownVal==='3.00'?'selected':''}>B  (3.00)</option><option value="2.75" ${dropdownVal==='2.75'?'selected':''}>B- (2.75)</option>
+                    <option value="2.50" ${dropdownVal==='2.50'?'selected':''}>C+ (2.50)</option><option value="2.25" ${dropdownVal==='2.25'?'selected':''}>C  (2.25)</option>
+                    <option value="2.00" ${dropdownVal==='2.00'?'selected':''}>D  (2.00)</option><option value="0.00" ${dropdownVal==='0.00'?'selected':''}>F  (0.00)</option>
+                    <option value="custom" ${dropdownVal==='custom'?'selected':''}>Custom...</option>
                 </select>
-                <input type="number" class="flex-1 gpa-input" placeholder="GPA" step="0.01" min="0" max="4.00" style="display:none;">
+                <input type="number" class="flex-1 gpa-input save-trigger" placeholder="GPA" step="0.01" min="0" max="4.00" value="${gpa}" style="display:${dropdownVal==='custom'?'block':'none'};">
             </div>
-            <button class="remove-btn" onclick="this.closest('.subject-row').remove()">X</button>
+            <button class="remove-btn" onclick="removeSubject(this)">X</button>
         `;
 
-        function extractText(btn) {
-            const block = btn.closest('.semester-block');
-            const textarea = block.querySelector('.magic-textarea');
-            const container = block.querySelector('.subjects-container');
-            const rawText = textarea.value;
-            
-            if (!rawText.trim()) return alert("Please paste some text into the box first!");
-
-            const regex = /(?:^|\n)?(?:\d+\s+)?([A-Za-z]{3,4}\s*\d{3,4})\s+(.+?)\s+(\d+(?:\.\d+)?)\s+([A-D][+-]?|F)\s+(\d+(?:\.\d+)?)/gm;
-            let match;
-            let extractedSubjects = [];
-
-            while ((match = regex.exec(rawText)) !== null) {
-                extractedSubjects.push({
-                    code: match[1].trim(),
-                    title: match[2].trim(),
-                    credit: parseFloat(match[3]),
-                    gradeLetter: match[4],
-                    gpa: parseFloat(match[5])
-                });
-            }
-
-            if (extractedSubjects.length === 0) {
-                alert("Could not find any matching grades in the text. Make sure it looks like the example.");
-                return;
-            }
-
-            const existingRows = container.querySelectorAll('.subject-row');
-            existingRows.forEach(row => {
-                if(!row.querySelector('.credit-input').value) row.remove();
-            });
-
-            extractedSubjects.forEach(subject => {
-                const row = document.createElement('div');
-                row.className = 'row subject-row';
-                
-                let dropdownValue = "custom";
-                const standardGpas = ["4.00", "3.75", "3.50", "3.25", "3.00", "2.75", "2.50", "2.25", "2.00", "0.00"];
-                const gpaStr = subject.gpa.toFixed(2);
-                if (standardGpas.includes(gpaStr)) { dropdownValue = gpaStr; }
-
-                row.innerHTML = `
-                    <input type="text" class="flex-1 course-code-input" value="${subject.code}" placeholder="Course Code">
-                    <input type="text" class="flex-3 course-title-input" value="${subject.title}" placeholder="Course Title">
-                    <input type="number" class="flex-1 credit-input" value="${subject.credit}" placeholder="Credit" step="0.5" min="0" required>
-                    <div style="flex:1.5; display:flex; gap:0.5rem; width:100%;">
-                        <select class="flex-1 grade-select" onchange="handleGradeChange(this)" required>
-                            <option value="4.00" ${dropdownValue === "4.00" ? 'selected' : ''}>A+ (4.00)</option>
-                            <option value="3.75" ${dropdownValue === "3.75" ? 'selected' : ''}>A  (3.75)</option>
-                            <option value="3.50" ${dropdownValue === "3.50" ? 'selected' : ''}>A- (3.50)</option>
-                            <option value="3.25" ${dropdownValue === "3.25" ? 'selected' : ''}>B+ (3.25)</option>
-                            <option value="3.00" ${dropdownValue === "3.00" ? 'selected' : ''}>B  (3.00)</option>
-                            <option value="2.75" ${dropdownValue === "2.75" ? 'selected' : ''}>B- (2.75)</option>
-                            <option value="2.50" ${dropdownValue === "2.50" ? 'selected' : ''}>C+ (2.50)</option>
-                            <option value="2.25" ${dropdownValue === "2.25" ? 'selected' : ''}>C  (2.25)</option>
-                            <option value="2.00" ${dropdownValue === "2.00" ? 'selected' : ''}>D  (2.00)</option>
-                            <option value="0.00" ${dropdownValue === "0.00" ? 'selected' : ''}>F  (0.00)</option>
-                            <option value="custom" ${dropdownValue === "custom" ? 'selected' : ''}>Custom...</option>
-                        </select>
-                        <input type="number" class="flex-1 gpa-input" value="${subject.gpa}" style="display:${dropdownValue === 'custom' ? 'block' : 'none'};">
-                    </div>
-                    <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
-                `;
-                container.appendChild(row);
-            });
-
-            textarea.value = ""; 
-            calculateCGPA(); 
-        }
-
-        function addSubject(btn) {
+        function addSubject(btn, data={}) {
             const container = btn.closest('.semester-block').querySelector('.subjects-container');
-            const row = document.createElement('div'); row.className = 'row subject-row'; row.innerHTML = subjectTemplate; container.appendChild(row);
+            const row = document.createElement('div'); row.className = 'row subject-row'; 
+            row.innerHTML = getSubjectHtml(data.cCode, data.cTitle, data.credit, data.dropdownVal, data.gpa);
+            container.appendChild(row);
+            saveData();
         }
 
-        function addSemester() {
+        function removeSubject(btn) { btn.closest('.subject-row').remove(); saveData(); }
+
+        function addSemester(name='', subjects=[]) {
+            semesterCount++;
             const container = document.getElementById('allSemestersContainer');
-            const semesterBlock = document.createElement('div'); semesterBlock.className = 'semester-block';
-            
-            semesterBlock.innerHTML = `
+            const block = document.createElement('div'); block.className = 'semester-block';
+            block.innerHTML = `
                 <div class="semester-header">
-                    <input type="text" class="semester-name-input" placeholder="Semester Name">
+                    <input type="text" class="semester-name-input save-trigger" placeholder="Semester ${semesterCount}" value="${name}">
                     <button class="remove-btn btn-sm" onclick="removeSemester(this)">Delete</button>
                 </div>
                 <div class="magic-extract-section">
@@ -373,18 +278,21 @@
                     <textarea class="magic-textarea" placeholder="Paste text here... (e.g. 1 CSE222 Object Oriented Programming Lab 1.50 A+ 4.00)"></textarea>
                     <button class="btn-warning btn-sm" onclick="extractText(this)">Extract & Auto-Fill Semester</button>
                 </div>
-                <div class="subjects-container"><div class="row subject-row">${subjectTemplate}</div></div>
+                <div class="subjects-container"></div>
                 <button class="btn-outline btn-sm" onclick="addSubject(this)" style="margin-top: 0.5rem;">+ Add Subject Manually</button>
             `;
-            container.appendChild(semesterBlock); 
+            container.appendChild(block);
+            
+            if(subjects.length === 0) {
+                addSubject(block.querySelector('.btn-outline')); 
+            } else {
+                subjects.forEach(sub => addSubject(block.querySelector('.btn-outline'), sub));
+            }
             updateSemesterTitles();
+            saveData();
         }
 
-        function removeSemester(btn) { 
-            btn.closest('.semester-block').remove(); 
-            updateSemesterTitles(); 
-        }
-
+        function removeSemester(btn) { btn.closest('.semester-block').remove(); updateSemesterTitles(); saveData(); }
         function updateSemesterTitles() {
             const blocks = document.querySelectorAll('.semester-block');
             blocks.forEach((b, i) => { 
@@ -392,15 +300,59 @@
                 b.querySelector('.semester-header .remove-btn').style.display = blocks.length === 1 ? 'none' : 'block'; 
             });
         }
-        
-        // Ensure the initial block is correctly labeled on load
-        updateSemesterTitles();
+        function handleGradeChange(sel) { 
+            const cust = sel.nextElementSibling; 
+            if (sel.value === 'custom') { cust.style.display = 'block'; cust.required = true; } 
+            else { cust.style.display = 'none'; cust.required = false; } 
+            saveData();
+        }
 
-        function handleGradeChange(sel) { const cust = sel.nextElementSibling; if (sel.value === 'custom') { cust.style.display = 'block'; cust.required = true; sel.style.display = 'none'; } else { cust.style.display = 'none'; cust.required = false; } }
+        // ================= MAGIC EXTRACT =================
+        function extractText(btn) {
+            const block = btn.closest('.semester-block');
+            const textarea = block.querySelector('.magic-textarea');
+            const container = block.querySelector('.subjects-container');
+            const rawText = textarea.value;
+            if (!rawText.trim()) return alert("Please paste some text into the box first!");
 
+            const regex = /(?:^|\n)?(?:\d+\s+)?([A-Za-z]{3,4}\s*\d{3,4})\s+(.+?)\s+(\d+(?:\.\d+)?)\s+([A-D][+-]?|F)\s+(\d+(?:\.\d+)?)/gm;
+            let match, count = 0;
+
+            container.querySelectorAll('.subject-row').forEach(row => { if(!row.querySelector('.credit-input').value) row.remove(); });
+
+            while ((match = regex.exec(rawText)) !== null) {
+                const gpaVal = parseFloat(match[5]).toFixed(2);
+                const isStandard = ["4.00", "3.75", "3.50", "3.25", "3.00", "2.75", "2.50", "2.25", "2.00", "0.00"].includes(gpaVal);
+                
+                addSubject(btn, {
+                    cCode: match[1].trim(),
+                    cTitle: match[2].trim(),
+                    credit: parseFloat(match[3]),
+                    dropdownVal: isStandard ? gpaVal : 'custom',
+                    gpa: isStandard ? '' : gpaVal
+                });
+                count++;
+            }
+            if (count === 0) return alert("Could not find any matching grades in the text. Make sure it matches DIU format.");
+            textarea.value = ""; calculateCGPA(); saveData();
+        }
+
+        // ================= CALCULATIONS & DUAL-CHART =================
         function calculateCGPA() {
-            const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0; const prevCredits = parseFloat(document.getElementById('prevCredits').value) || 0;
+            const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0; 
+            const prevCredits = parseFloat(document.getElementById('prevCredits').value) || 0;
+            
             let globalPoints = (prevCgpa * prevCredits), globalCredits = prevCredits, semHTML = "", hasValid = false;
+            let chartLabels = [], sgpaData = [], cgpaData = [];
+            
+            let runningPoints = globalPoints;
+            let runningCredits = globalCredits;
+
+            if(prevCredits > 0) { 
+                chartLabels.push('Previous'); 
+                sgpaData.push(prevCgpa.toFixed(2)); 
+                cgpaData.push(prevCgpa.toFixed(2)); 
+            }
 
             document.querySelectorAll('.semester-block').forEach((block, index) => {
                 let semPoints = 0, semCredits = 0;
@@ -412,168 +364,311 @@
                     const gpa = sel.value === 'custom' ? parseFloat(row.querySelector('.gpa-input').value) : parseFloat(sel.value);
                     if (!isNaN(credit) && !isNaN(gpa)) { semPoints += (credit * gpa); semCredits += credit; hasValid = true; }
                 });
+                
                 if (semCredits > 0) {
-                    semHTML += `<p>${semName} SGPA: <strong style="color:var(--primary)">${(semPoints/semCredits).toFixed(2)}</strong> (Credits: ${semCredits})</p>`;
-                    globalPoints += semPoints; globalCredits += semCredits;
+                    const sgpa = semPoints/semCredits;
+                    semHTML += `<p>${semName} SGPA: <strong style="color:var(--primary)">${sgpa.toFixed(2)}</strong> (Credits: ${semCredits})</p>`;
+                    
+                    runningPoints += semPoints; 
+                    runningCredits += semCredits;
+                    let currentCgpa = runningPoints / runningCredits;
+
+                    chartLabels.push(semName); 
+                    sgpaData.push(sgpa.toFixed(2));
+                    cgpaData.push(currentCgpa.toFixed(2));
                 }
             });
 
+            globalPoints = runningPoints; globalCredits = runningCredits;
+
             const res = document.getElementById('resultBox');
-            if (!hasValid && prevCredits === 0) { res.style.display = 'block'; res.style.borderLeftColor = 'var(--danger)'; res.innerHTML = '<p style="color: var(--danger); margin:0;">Please extract or enter valid data.</p>'; document.getElementById('downloadPdfBtn').style.display = 'none'; return; }
+            if (!hasValid && prevCredits === 0) { 
+                res.style.display = 'block'; res.style.borderLeftColor = 'var(--danger)'; 
+                res.innerHTML = '<p style="color: var(--danger); margin:0;">Please extract or enter valid data.</p>'; 
+                document.getElementById('downloadPdfBtn').style.display = 'none'; 
+                document.getElementById('chartSection').style.display = 'none';
+                document.getElementById('goalPlanner').style.display = 'none';
+                return; 
+            }
             
             const finalCgpa = globalCredits > 0 ? (globalPoints / globalCredits) : 0;
             res.style.display = 'block'; res.style.borderLeftColor = 'var(--primary)';
-            res.innerHTML = (semHTML ? `<div class="semester-sgpa-list">${semHTML}</div>` : "") + `<p>Total Credits: <strong>${globalCredits.toFixed(2)}</strong></p><p class="highlight">Overall Final CGPA: ${finalCgpa.toFixed(2)}</p>`;
+            res.innerHTML = (semHTML ? `<div class="semester-sgpa-list">${semHTML}</div>` : "") + 
+                            `<p>Total Credits: <strong>${globalCredits.toFixed(2)}</strong></p><p class="highlight">Overall Final CGPA: ${finalCgpa.toFixed(2)}</p>`;
+            
             document.getElementById('downloadPdfBtn').style.display = 'block';
+            document.getElementById('goalPlanner').style.display = 'block';
+            
+            globalStats = { currentPoints: globalPoints, currentCredits: globalCredits, currentCgpa: finalCgpa };
+
+            if(chartLabels.length > 0) {
+                document.getElementById('chartSection').style.display = 'block';
+                drawDualChart(chartLabels, sgpaData, cgpaData);
+            }
+            saveData();
         }
 
-        // ================= DIU OFFICIAL PRINT LAYOUT LOGIC =================
+        function drawDualChart(labels, sgpaData, cgpaData) {
+            const ctx = document.getElementById('sgpaChart').getContext('2d');
+            const style = getComputedStyle(document.body);
+            const lineColor = style.getPropertyValue('--chart-line').trim();
+            const bgColor = style.getPropertyValue('--chart-bg').trim();
+            const textColor = style.getPropertyValue('--text').trim();
+            const successColor = style.getPropertyValue('--success').trim();
+
+            if(myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { 
+                            type: 'bar',
+                            label: 'Semester SGPA', 
+                            data: sgpaData, 
+                            backgroundColor: 'rgba(23, 201, 100, 0.4)',
+                            borderColor: successColor,
+                            borderWidth: 1,
+                            borderRadius: 4
+                        },
+                        { 
+                            type: 'line',
+                            label: 'Cumulative CGPA', 
+                            data: cgpaData, 
+                            borderColor: lineColor, 
+                            backgroundColor: bgColor, 
+                            fill: true, 
+                            tension: 0.3, 
+                            pointRadius: 5, 
+                            borderWidth: 3 
+                        }
+                    ]
+                },
+                options: { 
+                    responsive: true,
+                    plugins: { 
+                        legend: { labels: { color: textColor } },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: { 
+                        y: { min: 2.0, max: 4.0, ticks: { color: textColor } },
+                        x: { ticks: { color: textColor } }
+                    } 
+                }
+            });
+        }
+
+        // ================= GOAL PLANNER =================
+        function calculateGoal() {
+            const targetCgpa = parseFloat(document.getElementById('targetCgpa').value);
+            const targetCredits = parseFloat(document.getElementById('targetCredits').value);
+            const resDiv = document.getElementById('goalResult');
+
+            if(isNaN(targetCgpa) || isNaN(targetCredits) || targetCredits <= 0) {
+                resDiv.innerHTML = `<span style="color:var(--danger)">Please enter valid Target CGPA and Future Credits.</span>`; return;
+            }
+
+            const newTotalCredits = globalStats.currentCredits + targetCredits;
+            const requiredTotalPoints = newTotalCredits * targetCgpa;
+            const pointsNeededNextSem = requiredTotalPoints - globalStats.currentPoints;
+            const requiredSgpa = pointsNeededNextSem / targetCredits;
+
+            if (requiredSgpa > 4.00) {
+                resDiv.innerHTML = `⚠️ Impossible. You need an SGPA of <span style="color:var(--danger)">${requiredSgpa.toFixed(2)}</span>, which is above 4.00.`;
+            } else if (requiredSgpa < 2.00) {
+                resDiv.innerHTML = `🎉 Relax! You only need an SGPA of <span style="color:var(--success)">${requiredSgpa.toFixed(2)}</span> to hit your goal!`;
+            } else {
+                resDiv.innerHTML = `✅ You need to score an SGPA of <span style="color:var(--primary); font-size:1.2rem;">${requiredSgpa.toFixed(2)}</span> next semester. Work hard!`;
+            }
+        }
+
+        // ================= CSV EXPORT / IMPORT =================
+        function escapeCSV(str) {
+            if(str == null) return '""';
+            return '"' + String(str).replace(/"/g, '""') + '"';
+        }
+
+        function exportCSV() {
+            saveData();
+            let csvContent = "Type,Val1,Val2,Val3,Val4,Val5,Val6,Val7\n";
+            
+            csvContent += ["Header", 
+                document.getElementById('studentName').value, document.getElementById('studentId').value,
+                document.getElementById('programName').value, document.getElementById('enrollmentSession').value,
+                document.getElementById('batchNo').value, document.getElementById('prevCgpa').value, 
+                document.getElementById('prevCredits').value
+            ].map(escapeCSV).join(",") + "\n";
+
+            document.querySelectorAll('.semester-block').forEach(block => {
+                const semName = block.querySelector('.semester-name-input').value;
+                csvContent += ["Semester", semName].map(escapeCSV).join(",") + "\n";
+                
+                block.querySelectorAll('.subject-row').forEach(row => {
+                    csvContent += ["Subject",
+                        row.querySelector('.course-code-input').value, row.querySelector('.course-title-input').value,
+                        row.querySelector('.credit-input').value, row.querySelector('.grade-select').value,
+                        row.querySelector('.gpa-input').value
+                    ].map(escapeCSV).join(",") + "\n";
+                });
+            });
+
+            const dataStr = "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent);
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "diu_cgpa_backup.csv");
+            document.body.appendChild(downloadAnchorNode); 
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function parseCSVLine(text) {
+            let ret = [], val = '', inQuotes = false;
+            for(let i=0; i<text.length; i++) {
+                let c = text[i];
+                if(c === '"' && text[i+1] === '"') { val += '"'; i++; }
+                else if(c === '"') { inQuotes = !inQuotes; }
+                else if(c === ',' && !inQuotes) { ret.push(val); val = ''; }
+                else { val += c; }
+            }
+            ret.push(val);
+            return ret;
+        }
+
+        function importCSV(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const contents = e.target.result;
+                const lines = contents.split(/\r?\n/);
+                
+                let data = { header: {}, semesters: [] };
+                let currentSem = null;
+
+                lines.forEach(line => {
+                    if(!line.trim()) return;
+                    const row = parseCSVLine(line);
+                    if(row[0] === 'Header') {
+                        data.header = { name: row[1], id: row[2], program: row[3], session: row[4], batch: row[5], prevCgpa: row[6], prevCredits: row[7] };
+                    } else if(row[0] === 'Semester') {
+                        if(currentSem) data.semesters.push(currentSem);
+                        currentSem = { name: row[1], subjects: [] };
+                    } else if(row[0] === 'Subject' && currentSem) {
+                        currentSem.subjects.push({ cCode: row[1], cTitle: row[2], credit: row[3], dropdownVal: row[4], gpa: row[5] });
+                    }
+                });
+                if(currentSem) data.semesters.push(currentSem);
+
+                localStorage.setItem('diu_cgpa_data', JSON.stringify(data));
+                loadData(JSON.stringify(data));
+                alert("CSV Data imported successfully!");
+                event.target.value = ''; 
+            };
+            reader.readAsText(file);
+        }
+
+        // ================= AUTO-SAVE (LOCAL STORAGE) =================
+        function saveData() {
+            const data = {
+                header: {
+                    name: document.getElementById('studentName').value, id: document.getElementById('studentId').value,
+                    program: document.getElementById('programName').value, session: document.getElementById('enrollmentSession').value,
+                    batch: document.getElementById('batchNo').value, prevCgpa: document.getElementById('prevCgpa').value, prevCredits: document.getElementById('prevCredits').value
+                },
+                semesters: []
+            };
+            document.querySelectorAll('.semester-block').forEach(block => {
+                const sem = { name: block.querySelector('.semester-name-input').value, subjects: [] };
+                block.querySelectorAll('.subject-row').forEach(row => {
+                    sem.subjects.push({
+                        cCode: row.querySelector('.course-code-input').value, cTitle: row.querySelector('.course-title-input').value,
+                        credit: row.querySelector('.credit-input').value, dropdownVal: row.querySelector('.grade-select').value, gpa: row.querySelector('.gpa-input').value
+                    });
+                });
+                data.semesters.push(sem);
+            });
+            localStorage.setItem('diu_cgpa_data', JSON.stringify(data));
+        }
+
+        function loadData(jsonData) {
+            if(!jsonData) return;
+            try {
+                const data = JSON.parse(jsonData);
+                if(!data.header) return;
+                document.getElementById('studentName').value = data.header.name || ''; document.getElementById('studentId').value = data.header.id || '';
+                document.getElementById('programName').value = data.header.program || ''; document.getElementById('enrollmentSession').value = data.header.session || '';
+                document.getElementById('batchNo').value = data.header.batch || ''; document.getElementById('prevCgpa').value = data.header.prevCgpa || '';
+                document.getElementById('prevCredits').value = data.header.prevCredits || '';
+                
+                document.getElementById('allSemestersContainer').innerHTML = ''; 
+                semesterCount = 0;
+                if (data.semesters && data.semesters.length > 0) {
+                    data.semesters.forEach(sem => addSemester(sem.name, sem.subjects));
+                } else {
+                    addSemester(); 
+                }
+                calculateCGPA();
+            } catch(e) { console.error("Data load failed", e); }
+        }
+
+        document.getElementById('mainInterface').addEventListener('input', function(e) {
+            if(e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') saveData();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            changeTheme(localStorage.getItem('savedTheme') || 'light');
+            const saved = localStorage.getItem('diu_cgpa_data');
+            if (saved) loadData(saved); else addSemester(); 
+        });
+
+        // ================= DIU OFFICIAL PRINT LAYOUT =================
         function generatePDF() {
             const name = document.getElementById('studentName').value || 'N/A';
             const studentId = document.getElementById('studentId').value || 'N/A';
             const programName = document.getElementById('programName').value || '4-Year B.Sc. in Computer Science & Engineering';
-            const session = document.getElementById('enrollmentSession').value || 'N/A';
-            const batch = document.getElementById('batchNo').value || 'N/A';
+            const session = document.getElementById('enrollmentSession').value || '-';
+            const batch = document.getElementById('batchNo').value || '-';
             const dateStr = new Date().toLocaleDateString('en-GB');
 
             const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0;
             const prevCredits = parseFloat(document.getElementById('prevCredits').value) || 0;
-            let globalPoints = (prevCgpa * prevCredits);
-            let globalCredits = prevCredits;
+            let globalPoints = (prevCgpa * prevCredits), globalCredits = prevCredits;
 
             let semestersHtml = '';
             document.querySelectorAll('.semester-block').forEach((block, index) => {
                 let semPoints = 0, semCreditsTaken = 0, semCreditsCompleted = 0, tableRows = '';
                 let semName = block.querySelector('.semester-name-input').value.trim() || `Semester ${index + 1}`;
 
-                block.querySelectorAll('.subject-row').forEach((row, subIndex) => {
+                block.querySelectorAll('.subject-row').forEach((row) => {
                     const cCode = row.querySelector('.course-code-input').value.trim() || '-';
                     const cTitle = row.querySelector('.course-title-input').value.trim() || '-';
                     const credit = parseFloat(row.querySelector('.credit-input').value);
                     const sel = row.querySelector('.grade-select');
                     const gpa = sel.value === 'custom' ? parseFloat(row.querySelector('.gpa-input').value) : parseFloat(sel.value);
-                    
-                    let rawText = sel.options[sel.selectedIndex]?.text || '';
-                    let letterGrade = sel.value === 'custom' ? 'Custom' : rawText.split(' ')[0];
+                    let letterGrade = sel.value === 'custom' ? 'Custom' : (sel.options[sel.selectedIndex]?.text || '').split(' ')[0];
 
                     if (!isNaN(credit) && !isNaN(gpa)) { 
-                        semPoints += (credit * gpa); 
-                        semCreditsTaken += credit;
+                        semPoints += (credit * gpa); semCreditsTaken += credit;
                         if(gpa > 0) semCreditsCompleted += credit; 
-                        
-                        tableRows += `
-                            <tr>
-                                <td>${cCode}</td>
-                                <td>${cTitle}</td>
-                                <td class="text-center">${credit}</td>
-                                <td class="text-center">${letterGrade}</td>
-                                <td class="text-center">${gpa}</td>
-                            </tr>
-                        `; 
+                        tableRows += `<tr><td>${cCode}</td><td>${cTitle}</td><td class="text-center">${credit}</td><td class="text-center">${letterGrade}</td><td class="text-center">${gpa.toFixed(2)}</td></tr>`; 
                     }
                 });
                 
                 if (semCreditsTaken > 0) {
-                    globalPoints += semPoints; 
-                    globalCredits += semCreditsTaken;
-                    const sgpa = semPoints / semCreditsTaken;
-                    
-                    semestersHtml += `
-                        <div class="semester-print-block avoid-break">
-                            <div class="semester-print-header">
-                                Semester: ${semName} <br>
-                                Credit Taken: ${semCreditsTaken} &nbsp;&nbsp;&nbsp; Credit Completed: ${semCreditsCompleted} &nbsp;&nbsp;&nbsp; GPA: ${sgpa.toFixed(2)}
-                            </div>
-                            <table class="semester-print-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 15%;">Course Code</th>
-                                        <th style="width: 45%;">Course Title</th>
-                                        <th style="width: 10%; text-align: center;">Credit</th>
-                                        <th style="width: 15%; text-align: center;">Grade</th>
-                                        <th style="width: 15%; text-align: center;">Grade Point</th>
-                                    </tr>
-                                </thead>
-                                <tbody>${tableRows}</tbody>
-                            </table>
-                        </div>
-                    `;
+                    globalPoints += semPoints; globalCredits += semCreditsTaken;
+                    semestersHtml += `<div class="semester-print-block avoid-break"><div class="semester-print-header">Semester: ${semName} <br>Credit Taken: ${semCreditsTaken} &nbsp;&nbsp;&nbsp; Credit Completed: ${semCreditsCompleted} &nbsp;&nbsp;&nbsp; GPA: ${(semPoints/semCreditsTaken).toFixed(2)}</div><table class="semester-print-table"><thead><tr><th style="width: 15%;">Course Code</th><th style="width: 45%;">Course Title</th><th style="width: 10%; text-align: center;">Credit</th><th style="width: 15%; text-align: center;">Grade</th><th style="width: 15%; text-align: center;">Grade Point</th></tr></thead><tbody>${tableRows}</tbody></table></div>`;
                 }
             });
 
             const finalCgpa = globalCredits > 0 ? (globalPoints / globalCredits) : 0;
 
-            let printHtml = `
-                <div class="print-header">
-                    <h1>Daffodil International University</h1>
-                    <p>Daffodil Smart City, Birulia, Savar, Dhaka-1216 Bangladesh<br>
-                    Tel: +88 02 9143254-5, 48111639, 48111670<br>
-                    E-mail: info@daffodilvarsity.edu.bd, Fax: +88 02 9131947</p>
-                    <h2>Transcript</h2>
-                </div>
-
-                <div class="info-grid">
-                    <div class="info-left">
-                        <table class="info-table">
-                            <tr><td>Program</td><td>: ${programName}</td></tr>
-                            <tr><td>Enrollment Session</td><td>: ${session}</td></tr>
-                            <tr><td>Date of Issue</td><td>: ${dateStr}</td></tr>
-                            <tr><td>Name of the Student</td><td>: ${name}</td></tr>
-                            <tr><td>Student ID</td><td>: ${studentId}</td></tr>
-                            <tr><td>Batch</td><td>: ${batch}</td></tr>
-                        </table>
-                    </div>
-                    <div class="info-right">
-                        <b>Academic Summary</b>
-                        <table class="summary-table">
-                            <tr><td>CGPA</td><td><b>${finalCgpa.toFixed(2)}</b></td></tr>
-                            <tr><td>Credits Completed</td><td><b>${globalCredits}</b></td></tr>
-                            <tr><td>Total Credit Requirement</td><td><b>-</b></td></tr>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="grading-section">
-                    <table class="grading-table">
-                        <thead>
-                            <tr>
-                                <th colspan="4" style="background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact;">UGC Uniform Grading System</th>
-                            </tr>
-                            <tr>
-                                <th>Marks (%)</th><th>Grade</th><th>Grade Point</th><th>Remarks</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>80-100</td><td>A+</td><td>4.00</td><td>Outstanding</td></tr>
-                            <tr><td>75-79</td><td>A</td><td>3.75</td><td>Excellent</td></tr>
-                            <tr><td>70-74</td><td>A-</td><td>3.50</td><td>Very Good</td></tr>
-                            <tr><td>65-69</td><td>B+</td><td>3.25</td><td>Good</td></tr>
-                            <tr><td>60-64</td><td>B</td><td>3.00</td><td>Satisfactory</td></tr>
-                            <tr><td>55-59</td><td>B-</td><td>2.75</td><td>Above Average</td></tr>
-                            <tr><td>50-54</td><td>C+</td><td>2.50</td><td>Average</td></tr>
-                            <tr><td>45-49</td><td>C</td><td>2.25</td><td>Below Average</td></tr>
-                            <tr><td>40-44</td><td>D</td><td>2.00</td><td>Pass</td></tr>
-                            <tr><td>00-39</td><td>F</td><td>0.00</td><td>Fail</td></tr>
-                        </tbody>
-                    </table>
-                    <div style="width: 35%; padding-left: 20px;">
-                        <br><br>
-                        <b>Verify Result</b><br>
-                        Visit the student portal to verify results:<br>
-                        <i>https://studentportal.diu.edu.bd</i>
-                    </div>
-                </div>
-                
+            document.getElementById('printArea').innerHTML = `
+                <div class="print-header"><h1>Daffodil International University</h1><p>Daffodil Smart City, Birulia, Savar, Dhaka-1216 Bangladesh<br>Tel: +88 02 9143254-5, 48111639, 48111670<br>E-mail: info@daffodilvarsity.edu.bd, Fax: +88 02 9131947</p><h2>Transcript</h2></div>
+                <div class="info-grid"><div class="info-left"><table class="info-table"><tr><td>Program</td><td>: ${programName}</td></tr><tr><td>Enrollment Session</td><td>: ${session}</td></tr><tr><td>Date of Issue</td><td>: ${dateStr}</td></tr><tr><td>Name of the Student</td><td>: ${name !== 'N/A' ? name : '-'}</td></tr><tr><td>Student ID</td><td>: ${studentId !== 'N/A' ? studentId : '-'}</td></tr><tr><td>Batch</td><td>: ${batch}</td></tr></table></div><div class="info-right"><b>Academic Summary</b><table class="summary-table"><tr><td>CGPA</td><td><b>${finalCgpa.toFixed(2)}</b></td></tr><tr><td>Credits Completed</td><td><b>${globalCredits}</b></td></tr><tr><td>Total Credit Requirement</td><td><b>154.5</b></td></tr></table></div></div>
+                <div class="grading-section"><table class="grading-table"><thead><tr><th colspan="4" style="background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact;">UGC Uniform Grading System</th></tr><tr><th>Marks (%)</th><th>Grade</th><th>Grade Point</th><th>Remarks</th></tr></thead><tbody><tr><td>80-100</td><td>A+</td><td>4.00</td><td>Outstanding</td></tr><tr><td>75-79</td><td>A</td><td>3.75</td><td>Excellent</td></tr><tr><td>70-74</td><td>A-</td><td>3.50</td><td>Very Good</td></tr><tr><td>65-69</td><td>B+</td><td>3.25</td><td>Good</td></tr><tr><td>60-64</td><td>B</td><td>3.00</td><td>Satisfactory</td></tr><tr><td>55-59</td><td>B-</td><td>2.75</td><td>Above Average</td></tr><tr><td>50-54</td><td>C+</td><td>2.50</td><td>Average</td></tr><tr><td>45-49</td><td>C</td><td>2.25</td><td>Below Average</td></tr><tr><td>40-44</td><td>D</td><td>2.00</td><td>Pass</td></tr><tr><td>00-39</td><td>F</td><td>0.00</td><td>Fail</td></tr></tbody></table><div style="width: 35%; padding-left: 20px;"><br><br><b>Verify Result</b><br>Visit the student portal to verify results:<br><i>https://studentportal.diu.edu.bd</i></div></div>
+                ${prevCredits > 0 ? `<div class="avoid-break" style="background: #f4f4f4; padding: 10px; margin-bottom: 20px; font-size:11px;"><strong>Previous Record:</strong> ${prevCredits} Credits | CGPA: ${prevCgpa.toFixed(2)}</div>` : ''}
                 ${semestersHtml}
-
-                <div class="print-footer avoid-break">
-                    <p style="margin: 0; font-weight: bold; font-size: 13px;">Developed by Minhajul Islam</p>
-                    <p style="margin: 3px 0 0 0; font-size: 11px;">B.Sc. in Computer Science and Engineering, DIU</p>
-                    <p style="margin: 3px 0 0 0; font-size: 11px;">Codeforces: NoObMin &nbsp;|&nbsp; Email: minhajul.cse.diu@gmail.com</p>
-                </div>
+                <div class="print-footer avoid-break">This document has been generated electronically and is valid without a physical signature.</div>
             `;
-            
-            document.getElementById('printArea').innerHTML = printHtml;
             window.print();
         }
     </script>

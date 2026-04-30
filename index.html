@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CGPA Calculator | Developed by Minhajul</title>
+    <title>DIU Auto-Extract CGPA Calculator | Minhajul</title>
     
     <meta name="description" content="A fast and easy CGPA and SGPA calculator for university students. Calculate multiple semesters instantly. Developed by Minhajul Islam.">
     <meta name="keywords" content="CGPA calculator, DIU CGPA calculator, university grade calculator, SGPA calculator, Minhajul Islam">
@@ -13,45 +13,46 @@
         /* LIGHT THEME (Default) */
         :root {
             --primary: #0070f3; --primary-hover: #0051a2; --success: #17c964; --success-hover: #12a150;
-            --danger: #ff4d4f; --danger-hover: #cf1322; --bg: #f4f4f9; --card-bg: #ffffff;
-            --text: #333333; --text-muted: #666666; --border-color: #eeeeee; --input-bg: #ffffff;
-            --input-border: #cccccc; --semester-bg: #fafafa; --result-bg: #e6f7ff;
-            --table-head-text: #ffffff; --table-even: #f9f9f9; --table-hover: #f1f1f1;
+            --danger: #ff4d4f; --danger-hover: #cf1322; --warning: #f5a623; --warning-hover: #d48a1c;
+            --bg: #f4f4f9; --card-bg: #ffffff; --text: #333333; --text-muted: #666666; 
+            --border-color: #eeeeee; --input-bg: #ffffff; --input-border: #cccccc; 
+            --semester-bg: #fafafa; --result-bg: #e6f7ff;
         }
 
         /* DARK THEME */
         [data-theme="dark"] {
             --primary: #3291ff; --primary-hover: #0070f3; --success: #17c964; --success-hover: #12a150;
-            --danger: #ff6b6b; --danger-hover: #fa5252; --bg: #121212; --card-bg: #1e1e1e;
-            --text: #ededed; --text-muted: #a0a0a0; --border-color: #333333; --input-bg: #2a2a2a;
-            --input-border: #444444; --semester-bg: #252525; --result-bg: rgba(50, 145, 255, 0.1);
-            --table-head-text: #ffffff; --table-even: #2a2a2a; --table-hover: #333333;
+            --danger: #ff6b6b; --danger-hover: #fa5252; --warning: #f5a623; --warning-hover: #d48a1c;
+            --bg: #121212; --card-bg: #1e1e1e; --text: #ededed; --text-muted: #a0a0a0; 
+            --border-color: #333333; --input-bg: #2a2a2a; --input-border: #444444; 
+            --semester-bg: #252525; --result-bg: rgba(50, 145, 255, 0.1);
         }
 
         /* OCEAN THEME */
         [data-theme="ocean"] {
             --primary: #00d2ff; --primary-hover: #3a7bd5; --success: #00b09b; --success-hover: #008a7a;
-            --danger: #ff4b2b; --danger-hover: #ff416c; --bg: #0f2027; --card-bg: #203a43;
-            --text: #ffffff; --text-muted: #b0c4de; --border-color: #2c5364; --input-bg: #152b36;
-            --input-border: #2c5364; --semester-bg: #182f3a; --result-bg: rgba(0, 210, 255, 0.1);
-            --table-head-text: #ffffff; --table-even: #1a323d; --table-hover: #2c5364;
+            --danger: #ff4b2b; --danger-hover: #ff416c; --warning: #f1c40f; --warning-hover: #f39c12;
+            --bg: #0f2027; --card-bg: #203a43; --text: #ffffff; --text-muted: #b0c4de; 
+            --border-color: #2c5364; --input-bg: #152b36; --input-border: #2c5364; 
+            --semester-bg: #182f3a; --result-bg: rgba(0, 210, 255, 0.1);
         }
 
-        /* Core Styles */
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); max-width: 750px; margin: 2rem auto; padding: 1rem; line-height: 1.5; transition: background-color 0.3s ease, color 0.3s ease; }
-        .card { background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: background-color 0.3s ease; }
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); max-width: 900px; margin: 2rem auto; padding: 1rem; line-height: 1.5; transition: all 0.3s ease; }
+        .card { background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         h2 { margin: 0; color: var(--primary); }
         h3 { font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 1.5rem; color: var(--text); }
         
         .theme-selector select { padding: 0.4rem 0.8rem; border-radius: 20px; cursor: pointer; font-weight: bold; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text); }
 
-        .row { display: flex; gap: 1rem; margin-bottom: 1rem; align-items: center; }
-        input, select { padding: 0.75rem; border: 1px solid var(--input-border); border-radius: 6px; font-size: 1rem; box-sizing: border-box; background-color: var(--input-bg); color: var(--text); transition: all 0.3s ease; }
-        ::placeholder { color: var(--text-muted); opacity: 0.7; }
+        .row { display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: center; }
+        input, select, textarea { padding: 0.75rem; border: 1px solid var(--input-border); border-radius: 6px; font-size: 0.95rem; box-sizing: border-box; background-color: var(--input-bg); color: var(--text); transition: all 0.3s ease; }
+        textarea { width: 100%; resize: vertical; min-height: 60px; font-family: monospace; font-size: 0.85rem; }
+        ::placeholder { color: var(--text-muted); opacity: 0.6; }
+        
         .flex-1 { flex: 1; width: 100%; }
-        .flex-2 { flex: 1.5; width: 100%; } 
-        .grade-wrapper { flex: 1; display: flex; gap: 0.5rem; width: 100%; }
+        .flex-2 { flex: 2; width: 100%; } 
+        .flex-3 { flex: 3; width: 100%; }
 
         button { padding: 0.75rem 1rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s, transform 0.1s; }
         button:hover { background: var(--primary-hover); }
@@ -63,87 +64,63 @@
         .remove-btn:hover { background: var(--danger-hover); }
         .btn-success { background: var(--success); }
         .btn-success:hover { background: var(--success-hover); }
+        .btn-warning { background: var(--warning); color: #fff; width: 100%; margin-top: 0.5rem; padding: 0.5rem; font-size: 0.9rem;}
+        .btn-warning:hover { background: var(--warning-hover); }
 
         .semester-block { background: var(--semester-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; position: relative; }
         .semester-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .semester-title { margin: 0; color: var(--primary); border: none; padding: 0; }
+        .semester-name-input { font-size: 1.2rem; font-weight: bold; border: none; border-bottom: 2px solid var(--primary); background: transparent; color: var(--primary); padding: 0.25rem; border-radius: 0; flex: 1; max-width: 300px; margin-right: 1rem;}
+        .semester-name-input:focus { outline: none; border-bottom-color: var(--warning); }
+        
+        .magic-extract-section { background: var(--card-bg); border: 1px dashed var(--border-color); padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; }
 
         .result { margin-top: 1.5rem; padding: 1.25rem; background: var(--result-bg); border-left: 4px solid var(--primary); border-radius: 4px; display: none; }
         .result p { margin: 0.5rem 0; color: var(--text); }
         .result .highlight { font-size: 1.25rem; font-weight: bold; color: var(--primary); margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;}
-        .semester-sgpa-list { margin-bottom: 1rem; padding: 1rem; background: var(--card-bg); border-radius: 4px; border: 1px solid var(--border-color); }
-
-        .reference-section { margin-top: 3rem; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
-        th, td { border: 1px solid var(--border-color); padding: 10px; text-align: center; color: var(--text); }
-        th { background-color: var(--primary); color: var(--table-head-text); font-weight: 600; }
-        tr:nth-child(even) { background-color: var(--table-even); }
-        tr:hover { background-color: var(--table-hover); }
 
         .dev-footer { margin-top: 3rem; padding-top: 2rem; border-top: 2px dashed var(--border-color); text-align: center; }
         .dev-footer h4 { margin: 0; color: var(--primary); font-size: 1.2rem; }
         .dev-footer p { margin: 0.5rem 0 1.5rem 0; font-size: 0.9rem; color: var(--text-muted); }
-        .social-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-        .social-links a { text-decoration: none; color: var(--text); background: var(--card-bg); padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 500; border: 1px solid var(--border-color); transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
-        .social-links a:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+        
+        @media (max-width: 768px) { .row { flex-direction: column; align-items: stretch; gap: 0.5rem; } }
 
-        @media (max-width: 600px) {
-            .row { flex-direction: column; gap: 0.5rem; align-items: stretch; }
-            .grade-wrapper { flex-direction: column; }
-            th, td { padding: 6px; font-size: 0.85rem; }
-            .action-buttons { flex-direction: column; }
-            .header-section { flex-direction: column; gap: 1rem; text-align: center; }
-        }
-
-        /* ================= THE BULLETPROOF PRINT STYLES ================= */
+        /* ================= THE BULLETPROOF PRINT STYLES (DIU Official Layout) ================= */
         #printArea { display: none; } 
-
         @media print {
-            body { 
-                background: white !important; 
-                margin: 0 !important; 
-                padding: 0 !important;
-            }
-            .card, .dev-footer, .theme-selector, button { 
-                display: none !important; 
-            }
+            body { background: white !important; margin: 0 !important; padding: 0 !important; font-family: 'Times New Roman', Times, serif; }
+            .card { display: none !important; }
+            #printArea { display: block !important; width: 100%; color: #000 !important; }
+            #printArea * { color: #000 !important; text-shadow: none !important; box-sizing: border-box; }
             
-            /* Make printArea a Flexbox container that takes up the full page height */
-            #printArea { 
-                display: flex !important; 
-                flex-direction: column;
-                min-height: 98vh; /* Stretches to the bottom of the page */
-                width: 100%; 
-                font-family: Arial, sans-serif;
-            }
+            .avoid-break { page-break-inside: avoid; break-inside: avoid; }
             
-            #printArea, #printArea * {
-                color: #000 !important; 
-                text-shadow: none !important;
-            }
+            .print-header { text-align: center; margin-bottom: 20px; }
+            .print-header h1 { margin: 0; font-size: 24px; font-weight: bold; }
+            .print-header p { margin: 2px 0; font-size: 11px; }
+            .print-header h2 { text-decoration: underline; font-size: 18px; margin: 15px 0 20px 0; }
 
-            .avoid-break {
-                page-break-inside: avoid;
-                break-inside: avoid;
-                margin-bottom: 20px;
-                display: block;
-            }
+            .info-grid { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 20px; }
+            .info-left { width: 55%; }
+            .info-right { width: 40%; }
+            .info-table { width: 100%; border-collapse: collapse; }
+            .info-table td { padding: 3px 0; vertical-align: top; }
+            .info-table td:first-child { width: 140px; font-weight: bold; }
+
+            .summary-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+            .summary-table td { border: 1px solid #000; padding: 5px; }
+
+            .grading-section { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 30px; }
+            .grading-table { border-collapse: collapse; width: 60%; }
+            .grading-table th, .grading-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; }
             
-            #printArea table { border-collapse: collapse; width: 100%; page-break-inside: auto; }
-            #printArea tr { page-break-inside: avoid; page-break-after: auto; }
-            #printArea th, #printArea td { border: 1px solid #000 !important; padding: 8px; text-align: left; color: #000 !important; font-weight: bold; }
-            #printArea th { background-color: #e6e6e6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-weight: 900; }
-            
-            /* Pushes the footer to the bottom of the Flexbox container */
-            .print-footer {
-                margin-top: auto !important; 
-                text-align: center;
-                font-size: 12px;
-                color: #000;
-                border-top: 1px dashed #000;
-                padding-top: 15px;
-                padding-bottom: 10px;
-            }
+            .semester-print-block { margin-bottom: 20px; font-size: 11px; }
+            .semester-print-header { font-weight: bold; margin-bottom: 5px; }
+            .semester-print-table { width: 100%; border-collapse: collapse; }
+            .semester-print-table th, .semester-print-table td { border: 1px solid #000; padding: 5px; text-align: left; }
+            .semester-print-table th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .text-center { text-align: center !important; }
+
+            .print-footer { margin-top: 40px; text-align: center; font-size: 11px; font-style: italic; }
         }
     </style>
 </head>
@@ -151,7 +128,7 @@
 
     <div class="card" id="mainInterface">
         <div class="header-section">
-            <h2>Advanced CGPA Calculator</h2>
+            <h2>DIU Auto-Extract CGPA Calculator</h2>
             <div class="theme-selector">
                 <select id="themeSwitch" onchange="changeTheme(this.value)">
                     <option value="light">☀️ Light Theme</option>
@@ -161,14 +138,18 @@
             </div>
         </div>
 
-        <h3>Student Details (For Marksheet)</h3>
+        <h3>Student Details (For Official Transcript)</h3>
         <div class="row">
-            <input type="text" id="studentName" class="flex-1" placeholder="Your Name (e.g., Minhajul Islam)">
-            <input type="text" id="studentId" class="flex-1" placeholder="Student ID (e.g., 201-15-XXXX)">
+            <input type="text" id="studentName" class="flex-1" placeholder="Your Name (Optional)">
+            <input type="text" id="studentId" class="flex-1" placeholder="Student ID (Optional)">
+        </div>
+        <div class="row">
+            <input type="text" id="programName" class="flex-2" placeholder="Program (Default: 4-Year B.Sc. in Computer Science & Engineering)">
+            <input type="text" id="enrollmentSession" class="flex-1" placeholder="Session (e.g., Spring 2023)">
+            <input type="text" id="batchNo" class="flex-1" placeholder="Batch (e.g., 61)">
         </div>
 
         <h3>Previous Results (Optional)</h3>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">Leave blank if you are calculating from scratch.</p>
         <div class="row">
             <input type="number" id="prevCgpa" class="flex-1" placeholder="Overall Previous CGPA (e.g., 3.80)" step="0.01" min="0" max="4.00">
             <input type="number" id="prevCredits" class="flex-1" placeholder="Total Previous Credits (e.g., 45)" step="0.5" min="0">
@@ -176,280 +157,285 @@
 
         <h3>Semesters</h3>
         <div id="allSemestersContainer">
+            <!-- Initial Semester Block -->
             <div class="semester-block">
                 <div class="semester-header">
-                    <h3 class="semester-title">Semester 1</h3>
-                    <button class="remove-btn btn-sm" onclick="removeSemester(this)" style="display:none;" title="Remove Semester">Delete Semester</button>
+                    <input type="text" class="semester-name-input" placeholder="Result of Spring 2025 (Optional)">
+                    <button class="remove-btn btn-sm" onclick="removeSemester(this)" style="display:none;">Delete</button>
                 </div>
+                
+                <div class="magic-extract-section">
+                    <p style="margin-top:0; margin-bottom:0.5rem; font-size:0.9rem; font-weight:bold; color:var(--primary);">✨ Magic Extract</p>
+                    <textarea class="magic-textarea" placeholder="Paste text here... (e.g. 1 CSE222 Object Oriented Programming Lab 1.50 A+ 4.00)"></textarea>
+                    <button class="btn-warning btn-sm" onclick="extractText(this)">Extract & Auto-Fill Semester</button>
+                </div>
+
                 <div class="subjects-container">
+                    <!-- Blank default row -->
                     <div class="row subject-row">
-                        <input type="text" class="flex-2 course-name-input" placeholder="Course Name (Optional)">
-                        <input type="number" class="flex-1 credit-input" placeholder="Credit (e.g., 3)" step="0.5" min="0" required>
-                        <div class="grade-wrapper">
+                        <input type="text" class="flex-1 course-code-input" placeholder="Course Code (Opt)">
+                        <input type="text" class="flex-3 course-title-input" placeholder="Course Title (Opt)">
+                        <input type="number" class="flex-1 credit-input" placeholder="Credit (Req)" step="0.5" min="0" required>
+                        <div style="flex:1.5; display:flex; gap:0.5rem; width:100%;">
                             <select class="flex-1 grade-select" onchange="handleGradeChange(this)" required>
-                                <option value="" disabled selected>Select Grade</option>
+                                <option value="" disabled selected>Grade (Req)</option>
                                 <option value="4.00">A+ (4.00)</option><option value="3.75">A  (3.75)</option><option value="3.50">A- (3.50)</option>
                                 <option value="3.25">B+ (3.25)</option><option value="3.00">B  (3.00)</option><option value="2.75">B- (2.75)</option>
                                 <option value="2.50">C+ (2.50)</option><option value="2.25">C  (2.25)</option><option value="2.00">D  (2.00)</option>
-                                <option value="0.00">F  (0.00)</option><option value="custom">Custom GPA...</option>
+                                <option value="0.00">F  (0.00)</option><option value="custom">Custom...</option>
                             </select>
-                            <input type="number" class="flex-1 gpa-input" placeholder="Enter GPA" step="0.01" min="0" max="4.00" style="display:none;">
+                            <input type="number" class="flex-1 gpa-input" placeholder="GPA" step="0.01" min="0" max="4.00" style="display:none;">
                         </div>
-                        <button class="remove-btn" onclick="this.parentElement.remove()" title="Remove Subject">X</button>
+                        <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
                     </div>
                 </div>
-                <button class="btn-outline btn-sm" onclick="addSubject(this)" style="margin-top: 0.5rem;">+ Add Subject</button>
+                <button class="btn-outline btn-sm" onclick="addSubject(this)">+ Add Subject Manually</button>
             </div>
         </div>
 
-        <button class="btn-outline" onclick="addSemester()">+ Add Another Semester</button>
+        <button class="btn-outline" onclick="addSemester()">+ Add Another Semester Block</button>
         
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
         
-        <!-- Action Buttons -->
-        <div class="row action-buttons">
+        <div class="row">
             <button onclick="calculateCGPA()" style="flex: 1; font-size: 1.1rem; padding: 1rem;">Calculate Final CGPA</button>
-            <button id="downloadPdfBtn" class="btn-success" onclick="generatePDF()" style="display:none; flex: 1; font-size: 1.1rem; padding: 1rem;">🖨️ Print / Save as PDF</button>
+            <button id="downloadPdfBtn" class="btn-success" onclick="generatePDF()" style="display:none; flex: 1; font-size: 1.1rem; padding: 1rem;">🖨️ Print Transcript</button>
         </div>
 
         <div id="resultBox" class="result"></div>
 
-        <div class="reference-section">
-            <h3>Grading System Reference</h3>
-            <table>
-                <thead><tr><th>Marks</th><th>Grade</th><th>Point</th><th>Remarks</th></tr></thead>
-                <tbody>
-                    <tr><td>80 – 100</td><td>A+</td><td>4.00</td><td>Outstanding</td></tr>
-                    <tr><td>75 – 79</td><td>A</td><td>3.75</td><td>Excellent</td></tr>
-                    <tr><td>70 – 74</td><td>A-</td><td>3.50</td><td>Very Good</td></tr>
-                    <tr><td>65 – 69</td><td>B+</td><td>3.25</td><td>Good</td></tr>
-                    <tr><td>60 – 64</td><td>B</td><td>3.00</td><td>Satisfactory</td></tr>
-                    <tr><td>55 – 59</td><td>B-</td><td>2.75</td><td>Above Average</td></tr>
-                    <tr><td>50 – 54</td><td>C+</td><td>2.50</td><td>Average</td></tr>
-                    <tr><td>45 – 49</td><td>C</td><td>2.25</td><td>Below Average</td></tr>
-                    <tr><td>40 – 44</td><td>D</td><td>2.00</td><td>Pass</td></tr>
-                    <tr><td>&lt; 40</td><td>F</td><td>0.00</td><td>Fail</td></tr>
-                </tbody>
-            </table>
-        </div>
-
         <div class="dev-footer">
             <h4>Developed by Minhajul Islam</h4>
             <p>B.Sc. in Computer Science and Engineering, DIU</p>
-            <div class="social-links">
-                <a href="https://codeforces.com/profile/NoObMin" target="_blank">📊 Codeforces: NoObMin</a>
-                <a href="mailto:minhajul.cse.diu@gmail.com">✉️ minhajul.cse.diu@gmail.com</a>
-            </div>
         </div>
     </div>
 
-    <!-- This container is ONLY visible when printing -->
+    <!-- Print Layout -->
     <div id="printArea"></div>
 
     <script>
-        // ================= THEME LOGIC =================
         function changeTheme(themeName) {
             document.documentElement.setAttribute('data-theme', themeName);
             localStorage.setItem('savedTheme', themeName);
         }
+        window.onload = () => { changeTheme(localStorage.getItem('savedTheme') || 'light'); };
 
-        window.onload = () => {
-            const savedTheme = localStorage.getItem('savedTheme') || 'light';
-            document.getElementById('themeSwitch').value = savedTheme;
-            changeTheme(savedTheme);
-        };
-
-        // ================= UI DYNAMICS LOGIC =================
-        let semesterCount = 1;
-
+        // Standard Row Template (4 Inputs)
         const subjectTemplate = `
-            <input type="text" class="flex-2 course-name-input" placeholder="Course Name (Optional)">
-            <input type="number" class="flex-1 credit-input" placeholder="Credit (e.g., 3)" step="0.5" min="0" required>
-            <div class="grade-wrapper">
+            <input type="text" class="flex-1 course-code-input" placeholder="Course Code (Opt)">
+            <input type="text" class="flex-3 course-title-input" placeholder="Course Title (Opt)">
+            <input type="number" class="flex-1 credit-input" placeholder="Credit (Req)" step="0.5" min="0" required>
+            <div style="flex:1.5; display:flex; gap:0.5rem; width:100%;">
                 <select class="flex-1 grade-select" onchange="handleGradeChange(this)" required>
-                    <option value="" disabled selected>Select Grade</option>
+                    <option value="" disabled selected>Grade (Req)</option>
                     <option value="4.00">A+ (4.00)</option><option value="3.75">A  (3.75)</option><option value="3.50">A- (3.50)</option>
                     <option value="3.25">B+ (3.25)</option><option value="3.00">B  (3.00)</option><option value="2.75">B- (2.75)</option>
                     <option value="2.50">C+ (2.50)</option><option value="2.25">C  (2.25)</option><option value="2.00">D  (2.00)</option>
-                    <option value="0.00">F  (0.00)</option><option value="custom">Custom GPA...</option>
+                    <option value="0.00">F  (0.00)</option><option value="custom">Custom...</option>
                 </select>
-                <input type="number" class="flex-1 gpa-input" placeholder="Enter GPA" step="0.01" min="0" max="4.00" style="display:none;">
+                <input type="number" class="flex-1 gpa-input" placeholder="GPA" step="0.01" min="0" max="4.00" style="display:none;">
             </div>
-            <button class="remove-btn" onclick="this.closest('.subject-row').remove()" title="Remove Subject">X</button>
+            <button class="remove-btn" onclick="this.closest('.subject-row').remove()">X</button>
         `;
 
-        function addSubject(buttonElement) {
-            const container = buttonElement.closest('.semester-block').querySelector('.subjects-container');
-            const row = document.createElement('div');
-            row.className = 'row subject-row';
-            row.innerHTML = subjectTemplate;
-            container.appendChild(row);
-        }
+        function extractText(btn) {
+            const block = btn.closest('.semester-block');
+            const textarea = block.querySelector('.magic-textarea');
+            const container = block.querySelector('.subjects-container');
+            const rawText = textarea.value;
+            
+            if (!rawText.trim()) return alert("Please paste some text into the box first!");
 
-        function addSemester() {
-            semesterCount++;
-            const container = document.getElementById('allSemestersContainer');
-            const semesterBlock = document.createElement('div');
-            semesterBlock.className = 'semester-block';
-            semesterBlock.innerHTML = `
-                <div class="semester-header"><h3 class="semester-title">Semester ${semesterCount}</h3><button class="remove-btn btn-sm" onclick="removeSemester(this)" title="Remove Semester">Delete Semester</button></div>
-                <div class="subjects-container"><div class="row subject-row">${subjectTemplate}</div></div>
-                <button class="btn-outline btn-sm" onclick="addSubject(this)" style="margin-top: 0.5rem;">+ Add Subject</button>
-            `;
-            container.appendChild(semesterBlock);
-            updateSemesterTitles();
-        }
+            const regex = /(?:^|\n)?(?:\d+\s+)?([A-Za-z]{3,4}\s*\d{3,4})\s+(.+?)\s+(\d+(?:\.\d+)?)\s+([A-D][+-]?|F)\s+(\d+(?:\.\d+)?)/gm;
+            let match;
+            let extractedSubjects = [];
 
-        function removeSemester(buttonElement) {
-            buttonElement.closest('.semester-block').remove();
-            updateSemesterTitles();
-        }
-
-        function updateSemesterTitles() {
-            const blocks = document.querySelectorAll('.semester-block');
-            blocks.forEach((block, index) => {
-                block.querySelector('.semester-title').innerText = `Semester ${index + 1}`;
-                const deleteBtn = block.querySelector('.semester-header .remove-btn');
-                if (blocks.length === 1) deleteBtn.style.display = 'none'; else deleteBtn.style.display = 'block';
-            });
-            semesterCount = blocks.length;
-        }
-
-        function handleGradeChange(selectElement) {
-            const customInput = selectElement.nextElementSibling;
-            if (selectElement.value === 'custom') { customInput.style.display = 'block'; customInput.required = true; selectElement.style.display = 'none'; } 
-            else { customInput.style.display = 'none'; customInput.required = false; }
-        }
-
-        // ================= CALCULATION LOGIC =================
-        function calculateCGPA() {
-            const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0;
-            const prevCredits = parseFloat(document.getElementById('prevCredits').value) || 0;
-
-            let globalTotalPoints = (prevCgpa * prevCredits);
-            let globalTotalCredits = prevCredits;
-            let semesterResultsHTML = "";
-            let anyValidInput = false;
-
-            const semesterBlocks = document.querySelectorAll('.semester-block');
-            semesterBlocks.forEach((block, index) => {
-                let semesterPoints = 0; let semesterCredits = 0;
-                const rows = block.querySelectorAll('.subject-row');
-                rows.forEach(row => {
-                    const credit = parseFloat(row.querySelector('.credit-input').value);
-                    const selectElement = row.querySelector('.grade-select');
-                    const customInput = row.querySelector('.gpa-input');
-                    let gpa = selectElement.value === 'custom' ? parseFloat(customInput.value) : parseFloat(selectElement.value);
-
-                    if (!isNaN(credit) && !isNaN(gpa)) {
-                        semesterPoints += (credit * gpa); semesterCredits += credit; anyValidInput = true;
-                    }
+            while ((match = regex.exec(rawText)) !== null) {
+                extractedSubjects.push({
+                    code: match[1].trim(),
+                    title: match[2].trim(),
+                    credit: parseFloat(match[3]),
+                    gradeLetter: match[4],
+                    gpa: parseFloat(match[5])
                 });
+            }
 
-                if (semesterCredits > 0) {
-                    const sgpa = semesterPoints / semesterCredits;
-                    semesterResultsHTML += `<p>Semester ${index + 1} SGPA: <strong style="color:var(--primary)">${sgpa.toFixed(2)}</strong> (Credits: ${semesterCredits})</p>`;
-                    globalTotalPoints += semesterPoints; globalTotalCredits += semesterCredits;
-                }
-            });
-
-            const resultBox = document.getElementById('resultBox');
-            if (!anyValidInput && prevCredits === 0) {
-                resultBox.style.display = 'block'; resultBox.style.borderLeftColor = 'var(--danger)';
-                resultBox.innerHTML = '<p style="color: var(--danger); margin:0;">Please enter valid credits and grades.</p>';
-                document.getElementById('downloadPdfBtn').style.display = 'none';
+            if (extractedSubjects.length === 0) {
+                alert("Could not find any matching grades in the text. Make sure it looks like the example.");
                 return;
             }
 
-            const finalCgpa = globalTotalCredits > 0 ? (globalTotalPoints / globalTotalCredits) : 0;
+            const existingRows = container.querySelectorAll('.subject-row');
+            existingRows.forEach(row => {
+                if(!row.querySelector('.credit-input').value) row.remove();
+            });
 
-            resultBox.style.display = 'block'; resultBox.style.borderLeftColor = 'var(--primary)';
-            let finalHTML = "";
-            if (semesterResultsHTML !== "") finalHTML += `<div class="semester-sgpa-list">${semesterResultsHTML}</div>`;
-            finalHTML += `<p>Total Credits Completed: <strong>${globalTotalCredits.toFixed(2)}</strong></p>`;
-            finalHTML += `<p class="highlight">Overall Final CGPA: ${finalCgpa.toFixed(2)}</p>`;
-            resultBox.innerHTML = finalHTML;
+            extractedSubjects.forEach(subject => {
+                const row = document.createElement('div');
+                row.className = 'row subject-row';
+                
+                let dropdownValue = "custom";
+                const standardGpas = ["4.00", "3.75", "3.50", "3.25", "3.00", "2.75", "2.50", "2.25", "2.00", "0.00"];
+                const gpaStr = subject.gpa.toFixed(2);
+                if (standardGpas.includes(gpaStr)) { dropdownValue = gpaStr; }
 
-            // Show the download/print button
+                row.innerHTML = `
+                    <input type="text" class="flex-1 course-code-input" value="${subject.code}" placeholder="Course Code">
+                    <input type="text" class="flex-3 course-title-input" value="${subject.title}" placeholder="Course Title">
+                    <input type="number" class="flex-1 credit-input" value="${subject.credit}" placeholder="Credit" step="0.5" min="0" required>
+                    <div style="flex:1.5; display:flex; gap:0.5rem; width:100%;">
+                        <select class="flex-1 grade-select" onchange="handleGradeChange(this)" required>
+                            <option value="4.00" ${dropdownValue === "4.00" ? 'selected' : ''}>A+ (4.00)</option>
+                            <option value="3.75" ${dropdownValue === "3.75" ? 'selected' : ''}>A  (3.75)</option>
+                            <option value="3.50" ${dropdownValue === "3.50" ? 'selected' : ''}>A- (3.50)</option>
+                            <option value="3.25" ${dropdownValue === "3.25" ? 'selected' : ''}>B+ (3.25)</option>
+                            <option value="3.00" ${dropdownValue === "3.00" ? 'selected' : ''}>B  (3.00)</option>
+                            <option value="2.75" ${dropdownValue === "2.75" ? 'selected' : ''}>B- (2.75)</option>
+                            <option value="2.50" ${dropdownValue === "2.50" ? 'selected' : ''}>C+ (2.50)</option>
+                            <option value="2.25" ${dropdownValue === "2.25" ? 'selected' : ''}>C  (2.25)</option>
+                            <option value="2.00" ${dropdownValue === "2.00" ? 'selected' : ''}>D  (2.00)</option>
+                            <option value="0.00" ${dropdownValue === "0.00" ? 'selected' : ''}>F  (0.00)</option>
+                            <option value="custom" ${dropdownValue === "custom" ? 'selected' : ''}>Custom...</option>
+                        </select>
+                        <input type="number" class="flex-1 gpa-input" value="${subject.gpa}" style="display:${dropdownValue === 'custom' ? 'block' : 'none'};">
+                    </div>
+                    <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
+                `;
+                container.appendChild(row);
+            });
+
+            textarea.value = ""; 
+            calculateCGPA(); 
+        }
+
+        function addSubject(btn) {
+            const container = btn.closest('.semester-block').querySelector('.subjects-container');
+            const row = document.createElement('div'); row.className = 'row subject-row'; row.innerHTML = subjectTemplate; container.appendChild(row);
+        }
+
+        function addSemester() {
+            const container = document.getElementById('allSemestersContainer');
+            const semesterBlock = document.createElement('div'); semesterBlock.className = 'semester-block';
+            semesterBlock.innerHTML = `
+                <div class="semester-header">
+                    <input type="text" class="semester-name-input" placeholder="Semester Name (Optional)">
+                    <button class="remove-btn btn-sm" onclick="removeSemester(this)">Delete</button>
+                </div>
+                <div class="magic-extract-section">
+                    <p style="margin-top:0; margin-bottom:0.5rem; font-size:0.9rem; font-weight:bold; color:var(--primary);">✨ Magic Extract</p>
+                    <textarea class="magic-textarea" placeholder="Paste text here... (e.g. 1 CSE222 Object Oriented Programming Lab 1.50 A+ 4.00)"></textarea>
+                    <button class="btn-warning btn-sm" onclick="extractText(this)">Extract & Auto-Fill Semester</button>
+                </div>
+                <div class="subjects-container"><div class="row subject-row">${subjectTemplate}</div></div>
+                <button class="btn-outline btn-sm" onclick="addSubject(this)" style="margin-top: 0.5rem;">+ Add Subject Manually</button>
+            `;
+            container.appendChild(semesterBlock); updateDeleteButtons();
+        }
+
+        function removeSemester(btn) { btn.closest('.semester-block').remove(); updateDeleteButtons(); }
+        function updateDeleteButtons() {
+            const blocks = document.querySelectorAll('.semester-block');
+            blocks.forEach(b => { b.querySelector('.semester-header .remove-btn').style.display = blocks.length === 1 ? 'none' : 'block'; });
+        }
+        function handleGradeChange(sel) { const cust = sel.nextElementSibling; if (sel.value === 'custom') { cust.style.display = 'block'; cust.required = true; sel.style.display = 'none'; } else { cust.style.display = 'none'; cust.required = false; } }
+
+        function calculateCGPA() {
+            const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0; const prevCredits = parseFloat(document.getElementById('prevCredits').value) || 0;
+            let globalPoints = (prevCgpa * prevCredits), globalCredits = prevCredits, semHTML = "", hasValid = false;
+
+            document.querySelectorAll('.semester-block').forEach((block, index) => {
+                let semPoints = 0, semCredits = 0;
+                let semName = block.querySelector('.semester-name-input').value.trim() || `Semester ${index + 1}`;
+                
+                block.querySelectorAll('.subject-row').forEach(row => {
+                    const credit = parseFloat(row.querySelector('.credit-input').value);
+                    const sel = row.querySelector('.grade-select');
+                    const gpa = sel.value === 'custom' ? parseFloat(row.querySelector('.gpa-input').value) : parseFloat(sel.value);
+                    if (!isNaN(credit) && !isNaN(gpa)) { semPoints += (credit * gpa); semCredits += credit; hasValid = true; }
+                });
+                if (semCredits > 0) {
+                    semHTML += `<p>${semName} SGPA: <strong style="color:var(--primary)">${(semPoints/semCredits).toFixed(2)}</strong> (Credits: ${semCredits})</p>`;
+                    globalPoints += semPoints; globalCredits += semCredits;
+                }
+            });
+
+            const res = document.getElementById('resultBox');
+            if (!hasValid && prevCredits === 0) { res.style.display = 'block'; res.style.borderLeftColor = 'var(--danger)'; res.innerHTML = '<p style="color: var(--danger); margin:0;">Please extract or enter valid data.</p>'; document.getElementById('downloadPdfBtn').style.display = 'none'; return; }
+            
+            const finalCgpa = globalCredits > 0 ? (globalPoints / globalCredits) : 0;
+            res.style.display = 'block'; res.style.borderLeftColor = 'var(--primary)';
+            res.innerHTML = (semHTML ? `<div class="semester-sgpa-list">${semHTML}</div>` : "") + `<p>Total Credits: <strong>${globalCredits.toFixed(2)}</strong></p><p class="highlight">Overall Final CGPA: ${finalCgpa.toFixed(2)}</p>`;
             document.getElementById('downloadPdfBtn').style.display = 'block';
         }
 
-        // ================= BULLETPROOF PRINT LOGIC =================
+        // ================= DIU OFFICIAL PRINT LAYOUT LOGIC =================
         function generatePDF() {
+            // Get Input Values
             const name = document.getElementById('studentName').value || 'N/A';
             const studentId = document.getElementById('studentId').value || 'N/A';
-            const date = new Date().toLocaleDateString();
+            const programName = document.getElementById('programName').value || '4-Year B.Sc. in Computer Science & Engineering';
+            const session = document.getElementById('enrollmentSession').value || 'N/A';
+            const batch = document.getElementById('batchNo').value || 'N/A';
+            const dateStr = new Date().toLocaleDateString('en-GB'); // DD/MM/YYYY
 
-            let printHtml = `
-                <div style="text-align: center; border-bottom: 2px solid #000; margin-bottom: 20px; padding-bottom: 10px;">
-                    <h1 style="margin: 0;">Daffodil International University</h1>
-                    <h2 style="margin: 5px 0;">Academic Transcript (Unofficial)</h2>
-                </div>
-                <div style="margin-bottom: 30px; display: flex; justify-content: space-between;">
-                    <div>
-                        <p style="margin: 5px 0;"><strong>Student Name:</strong> ${name}</p>
-                        <p style="margin: 5px 0;"><strong>Student ID:</strong> ${studentId}</p>
-                    </div>
-                    <div style="text-align: right;">
-                        <p style="margin: 5px 0;"><strong>Date Generated:</strong> ${date}</p>
-                    </div>
-                </div>
-            `;
-
+            // Calculate Overall Totals
             const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0;
             const prevCredits = parseFloat(document.getElementById('prevCredits').value) || 0;
-            if (prevCredits > 0) {
-                printHtml += `<div class="avoid-break" style="background: #f4f4f4; padding: 10px; border: 1px solid #000;">
-                                <strong>Previous Record:</strong> Completed ${prevCredits} Credits with a CGPA of ${prevCgpa.toFixed(2)}
-                              </div>`;
-            }
+            let globalPoints = (prevCgpa * prevCredits);
+            let globalCredits = prevCredits;
 
-            let globalTotalPoints = (prevCgpa * prevCredits);
-            let globalTotalCredits = prevCredits;
+            // Generate Semester Blocks
+            let semestersHtml = '';
+            document.querySelectorAll('.semester-block').forEach((block, index) => {
+                let semPoints = 0, semCreditsTaken = 0, semCreditsCompleted = 0, tableRows = '';
+                let semName = block.querySelector('.semester-name-input').value.trim() || `Semester ${index + 1}`;
 
-            const semesterBlocks = document.querySelectorAll('.semester-block');
-            semesterBlocks.forEach((block, index) => {
-                let semesterPoints = 0; let semesterCredits = 0;
-                let tableRows = '';
-
-                const rows = block.querySelectorAll('.subject-row');
-                rows.forEach((row, subIndex) => {
-                    const courseNameInput = row.querySelector('.course-name-input').value.trim();
+                block.querySelectorAll('.subject-row').forEach((row, subIndex) => {
+                    const cCode = row.querySelector('.course-code-input').value.trim() || '-';
+                    const cTitle = row.querySelector('.course-title-input').value.trim() || '-';
                     const credit = parseFloat(row.querySelector('.credit-input').value);
-                    const selectElement = row.querySelector('.grade-select');
-                    const customInput = row.querySelector('.gpa-input');
+                    const sel = row.querySelector('.grade-select');
+                    const gpa = sel.value === 'custom' ? parseFloat(row.querySelector('.gpa-input').value) : parseFloat(sel.value);
                     
-                    let gradeText = selectElement.options[selectElement.selectedIndex]?.text || 'N/A';
-                    let gpa = selectElement.value === 'custom' ? parseFloat(customInput.value) : parseFloat(selectElement.value);
-                    
-                    // THE FIX: Format the displayed grade perfectly based on dropdown or custom input
-                    let displayGrade = selectElement.value === 'custom' ? `${gpa.toFixed(2)} (Custom)` : gradeText;
+                    let rawText = sel.options[sel.selectedIndex]?.text || '';
+                    let letterGrade = sel.value === 'custom' ? 'Custom' : rawText.split(' ')[0];
 
-                    let displayCourseName = courseNameInput !== '' ? courseNameInput : `Subject ${subIndex + 1}`;
-
-                    if (!isNaN(credit) && !isNaN(gpa)) {
-                        semesterPoints += (credit * gpa); semesterCredits += credit;
-                        tableRows += `<tr>
-                            <td>${displayCourseName}</td>
-                            <td style="text-align: center;">${credit}</td>
-                            <td style="text-align: center;">${displayGrade}</td>
-                        </tr>`;
+                    if (!isNaN(credit) && !isNaN(gpa)) { 
+                        semPoints += (credit * gpa); 
+                        semCreditsTaken += credit;
+                        if(gpa > 0) semCreditsCompleted += credit; // F grade means not completed
+                        
+                        tableRows += `
+                            <tr>
+                                <td>${cCode}</td>
+                                <td>${cTitle}</td>
+                                <td class="text-center">${credit}</td>
+                                <td class="text-center">${letterGrade}</td>
+                                <td class="text-center">${gpa}</td>
+                            </tr>
+                        `; 
                     }
                 });
-
-                if (semesterCredits > 0) {
-                    const sgpa = semesterPoints / semesterCredits;
-                    globalTotalPoints += semesterPoints; globalTotalCredits += semesterCredits;
-
-                    printHtml += `
-                        <div class="avoid-break">
-                            <h3 style="margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 5px;">Semester ${index + 1} (SGPA: ${sgpa.toFixed(2)})</h3>
-                            <table>
+                
+                if (semCreditsTaken > 0) {
+                    globalPoints += semPoints; 
+                    globalCredits += semCreditsTaken;
+                    const sgpa = semPoints / semCreditsTaken;
+                    
+                    semestersHtml += `
+                        <div class="semester-print-block avoid-break">
+                            <div class="semester-print-header">
+                                Semester: ${semName} <br>
+                                Credit Taken: ${semCreditsTaken} &nbsp;&nbsp;&nbsp; Credit Completed: ${semCreditsCompleted} &nbsp;&nbsp;&nbsp; GPA: ${sgpa.toFixed(2)}
+                            </div>
+                            <table class="semester-print-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 50%;">Course Name</th>
-                                        <th style="width: 20%; text-align: center;">Credit</th>
-                                        <th style="width: 30%; text-align: center;">GPA Acquired</th>
+                                        <th style="width: 15%;">Course Code</th>
+                                        <th style="width: 45%;">Course Title</th>
+                                        <th style="width: 10%; text-align: center;">Credit</th>
+                                        <th style="width: 15%; text-align: center;">Grade</th>
+                                        <th style="width: 15%; text-align: center;">Grade Point</th>
                                     </tr>
                                 </thead>
                                 <tbody>${tableRows}</tbody>
@@ -459,20 +445,78 @@
                 }
             });
 
-            const finalCgpa = globalTotalCredits > 0 ? (globalTotalPoints / globalTotalCredits) : 0;
+            const finalCgpa = globalCredits > 0 ? (globalPoints / globalCredits) : 0;
 
-            printHtml += `
-                <div class="avoid-break" style="margin-top: 30px; padding: 15px; border: 2px solid #000;">
-                    <h3 style="margin: 0 0 10px 0;">Final Calculation</h3>
-                    <p style="margin: 5px 0; font-size: 16px;">Total Credits Completed: <strong>${globalTotalCredits.toFixed(2)}</strong></p>
-                    <p style="margin: 5px 0; font-size: 20px;">Overall Final CGPA: <strong>${finalCgpa.toFixed(2)}</strong></p>
+            // Build the Official DIU Layout
+            let printHtml = `
+                <div class="print-header">
+                    <h1>Daffodil International University</h1>
+                    <p>Daffodil Smart City, Birulia, Savar, Dhaka-1216 Bangladesh<br>
+                    Tel: +88 02 9143254-5, 48111639, 48111670<br>
+                    E-mail: info@daffodilvarsity.edu.bd, Fax: +88 02 9131947</p>
+                    <h2>Transcript</h2>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-left">
+                        <table class="info-table">
+                            <tr><td>Program</td><td>: ${programName}</td></tr>
+                            <tr><td>Enrollment Session</td><td>: ${session}</td></tr>
+                            <tr><td>Date of Issue</td><td>: ${dateStr}</td></tr>
+                            <tr><td>Name of the Student</td><td>: ${name}</td></tr>
+                            <tr><td>Student ID</td><td>: ${studentId}</td></tr>
+                            <tr><td>Batch</td><td>: ${batch}</td></tr>
+                        </table>
+                    </div>
+                    <div class="info-right">
+                        <b>Academic Summary</b>
+                        <table class="summary-table">
+                            <tr><td>CGPA</td><td><b>${finalCgpa.toFixed(2)}</b></td></tr>
+                            <tr><td>Credits Completed</td><td><b>${globalCredits}</b></td></tr>
+                            <tr><td>Total Credit Requirement</td><td><b>-</b></td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="grading-section">
+                    <table class="grading-table">
+                        <thead>
+                            <tr>
+                                <th colspan="4" style="background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact;">UGC Uniform Grading System</th>
+                            </tr>
+                            <tr>
+                                <th>Marks (%)</th><th>Grade</th><th>Grade Point</th><th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>80-100</td><td>A+</td><td>4.00</td><td>Outstanding</td></tr>
+                            <tr><td>75-79</td><td>A</td><td>3.75</td><td>Excellent</td></tr>
+                            <tr><td>70-74</td><td>A-</td><td>3.50</td><td>Very Good</td></tr>
+                            <tr><td>65-69</td><td>B+</td><td>3.25</td><td>Good</td></tr>
+                            <tr><td>60-64</td><td>B</td><td>3.00</td><td>Satisfactory</td></tr>
+                            <tr><td>55-59</td><td>B-</td><td>2.75</td><td>Above Average</td></tr>
+                            <tr><td>50-54</td><td>C+</td><td>2.50</td><td>Average</td></tr>
+                            <tr><td>45-49</td><td>C</td><td>2.25</td><td>Below Average</td></tr>
+                            <tr><td>40-44</td><td>D</td><td>2.00</td><td>Pass</td></tr>
+                            <tr><td>00-39</td><td>F</td><td>0.00</td><td>Fail</td></tr>
+                        </tbody>
+                    </table>
+                    <div style="width: 35%; padding-left: 20px;">
+                        <br><br>
+                        <b>Verify Result</b><br>
+                        Visit the student portal to verify results:<br>
+                        <i>https://studentportal.diu.edu.bd</i>
+                    </div>
                 </div>
                 
+                <!-- Semesters Go Here -->
+                ${semestersHtml}
+
                 <div class="print-footer avoid-break">
-                    <p style="margin: 0;">Generated by DIU CGPA Calculator (Developed by Minhajul Islam)</p>
+                    This document has been generated electronically and is valid without a physical signature.
                 </div>
             `;
-
+            
             document.getElementById('printArea').innerHTML = printHtml;
             window.print();
         }

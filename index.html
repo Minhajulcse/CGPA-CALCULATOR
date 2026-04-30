@@ -81,6 +81,9 @@
         .dev-footer { margin-top: 3rem; padding-top: 2rem; border-top: 2px dashed var(--border-color); text-align: center; }
         .dev-footer h4 { margin: 0; color: var(--primary); font-size: 1.2rem; }
         .dev-footer p { margin: 0.5rem 0 1.5rem 0; font-size: 0.9rem; color: var(--text-muted); }
+        .social-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+        .social-links a { text-decoration: none; color: var(--text); background: var(--card-bg); padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 500; border: 1px solid var(--border-color); transition: all 0.3s ease; }
+        .social-links a:hover { background: var(--primary); color: white; border-color: var(--primary); }
         
         @media (max-width: 768px) { .row { flex-direction: column; align-items: stretch; gap: 0.5rem; } }
 
@@ -89,7 +92,7 @@
         @media print {
             body { background: white !important; margin: 0 !important; padding: 0 !important; font-family: 'Times New Roman', Times, serif; }
             .card { display: none !important; }
-            #printArea { display: block !important; width: 100%; color: #000 !important; }
+            #printArea { display: flex !important; flex-direction: column; min-height: 98vh; width: 100%; color: #000 !important; }
             #printArea * { color: #000 !important; text-shadow: none !important; box-sizing: border-box; }
             
             .avoid-break { page-break-inside: avoid; break-inside: avoid; }
@@ -120,7 +123,14 @@
             .semester-print-table th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .text-center { text-align: center !important; }
 
-            .print-footer { margin-top: 40px; text-align: center; font-size: 11px; font-style: italic; }
+            .print-footer { 
+                margin-top: auto !important; 
+                text-align: center; 
+                font-size: 11px; 
+                border-top: 1px dashed #000; 
+                padding-top: 15px; 
+                padding-bottom: 10px; 
+            }
         }
     </style>
 </head>
@@ -160,7 +170,7 @@
             <!-- Initial Semester Block -->
             <div class="semester-block">
                 <div class="semester-header">
-                    <input type="text" class="semester-name-input" placeholder="Result of Spring 2025 (Optional)">
+                    <input type="text" class="semester-name-input" placeholder="Semester 1 (Optional)">
                     <button class="remove-btn btn-sm" onclick="removeSemester(this)" style="display:none;">Delete</button>
                 </div>
                 
@@ -171,7 +181,6 @@
                 </div>
 
                 <div class="subjects-container">
-                    <!-- Blank default row -->
                     <div class="row subject-row">
                         <input type="text" class="flex-1 course-code-input" placeholder="Course Code (Opt)">
                         <input type="text" class="flex-3 course-title-input" placeholder="Course Title (Opt)">
@@ -207,6 +216,10 @@
         <div class="dev-footer">
             <h4>Developed by Minhajul Islam</h4>
             <p>B.Sc. in Computer Science and Engineering, DIU</p>
+            <div class="social-links">
+                <a href="https://codeforces.com/profile/NoObMin" target="_blank">📊 Codeforces: NoObMin</a>
+                <a href="mailto:minhajul.cse.diu@gmail.com">✉️ minhajul.cse.diu@gmail.com</a>
+            </div>
         </div>
     </div>
 
@@ -220,7 +233,7 @@
         }
         window.onload = () => { changeTheme(localStorage.getItem('savedTheme') || 'light'); };
 
-        // Standard Row Template (4 Inputs)
+        // Standard Row Template
         const subjectTemplate = `
             <input type="text" class="flex-1 course-code-input" placeholder="Course Code (Opt)">
             <input type="text" class="flex-3 course-title-input" placeholder="Course Title (Opt)">
@@ -316,9 +329,10 @@
         function addSemester() {
             const container = document.getElementById('allSemestersContainer');
             const semesterBlock = document.createElement('div'); semesterBlock.className = 'semester-block';
+            
             semesterBlock.innerHTML = `
                 <div class="semester-header">
-                    <input type="text" class="semester-name-input" placeholder="Semester Name (Optional)">
+                    <input type="text" class="semester-name-input" placeholder="Semester Name">
                     <button class="remove-btn btn-sm" onclick="removeSemester(this)">Delete</button>
                 </div>
                 <div class="magic-extract-section">
@@ -329,14 +343,26 @@
                 <div class="subjects-container"><div class="row subject-row">${subjectTemplate}</div></div>
                 <button class="btn-outline btn-sm" onclick="addSubject(this)" style="margin-top: 0.5rem;">+ Add Subject Manually</button>
             `;
-            container.appendChild(semesterBlock); updateDeleteButtons();
+            container.appendChild(semesterBlock); 
+            updateSemesterTitles();
         }
 
-        function removeSemester(btn) { btn.closest('.semester-block').remove(); updateDeleteButtons(); }
-        function updateDeleteButtons() {
-            const blocks = document.querySelectorAll('.semester-block');
-            blocks.forEach(b => { b.querySelector('.semester-header .remove-btn').style.display = blocks.length === 1 ? 'none' : 'block'; });
+        function removeSemester(btn) { 
+            btn.closest('.semester-block').remove(); 
+            updateSemesterTitles(); 
         }
+
+        function updateSemesterTitles() {
+            const blocks = document.querySelectorAll('.semester-block');
+            blocks.forEach((b, i) => { 
+                b.querySelector('.semester-name-input').placeholder = `Semester ${i + 1} (Optional)`;
+                b.querySelector('.semester-header .remove-btn').style.display = blocks.length === 1 ? 'none' : 'block'; 
+            });
+        }
+        
+        // Ensure the initial block is correctly labeled on load
+        updateSemesterTitles();
+
         function handleGradeChange(sel) { const cust = sel.nextElementSibling; if (sel.value === 'custom') { cust.style.display = 'block'; cust.required = true; sel.style.display = 'none'; } else { cust.style.display = 'none'; cust.required = false; } }
 
         function calculateCGPA() {
@@ -370,21 +396,18 @@
 
         // ================= DIU OFFICIAL PRINT LAYOUT LOGIC =================
         function generatePDF() {
-            // Get Input Values
             const name = document.getElementById('studentName').value || 'N/A';
             const studentId = document.getElementById('studentId').value || 'N/A';
             const programName = document.getElementById('programName').value || '4-Year B.Sc. in Computer Science & Engineering';
             const session = document.getElementById('enrollmentSession').value || 'N/A';
             const batch = document.getElementById('batchNo').value || 'N/A';
-            const dateStr = new Date().toLocaleDateString('en-GB'); // DD/MM/YYYY
+            const dateStr = new Date().toLocaleDateString('en-GB');
 
-            // Calculate Overall Totals
             const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0;
             const prevCredits = parseFloat(document.getElementById('prevCredits').value) || 0;
             let globalPoints = (prevCgpa * prevCredits);
             let globalCredits = prevCredits;
 
-            // Generate Semester Blocks
             let semestersHtml = '';
             document.querySelectorAll('.semester-block').forEach((block, index) => {
                 let semPoints = 0, semCreditsTaken = 0, semCreditsCompleted = 0, tableRows = '';
@@ -403,7 +426,7 @@
                     if (!isNaN(credit) && !isNaN(gpa)) { 
                         semPoints += (credit * gpa); 
                         semCreditsTaken += credit;
-                        if(gpa > 0) semCreditsCompleted += credit; // F grade means not completed
+                        if(gpa > 0) semCreditsCompleted += credit; 
                         
                         tableRows += `
                             <tr>
@@ -447,7 +470,6 @@
 
             const finalCgpa = globalCredits > 0 ? (globalPoints / globalCredits) : 0;
 
-            // Build the Official DIU Layout
             let printHtml = `
                 <div class="print-header">
                     <h1>Daffodil International University</h1>
@@ -509,11 +531,12 @@
                     </div>
                 </div>
                 
-                <!-- Semesters Go Here -->
                 ${semestersHtml}
 
                 <div class="print-footer avoid-break">
-                    This document has been generated electronically and is valid without a physical signature.
+                    <p style="margin: 0; font-weight: bold; font-size: 13px;">Developed by Minhajul Islam</p>
+                    <p style="margin: 3px 0 0 0; font-size: 11px;">B.Sc. in Computer Science and Engineering, DIU</p>
+                    <p style="margin: 3px 0 0 0; font-size: 11px;">Codeforces: NoObMin &nbsp;|&nbsp; Email: minhajul.cse.diu@gmail.com</p>
                 </div>
             `;
             

@@ -8,7 +8,12 @@
     <meta name="description" content="A fast and easy CGPA and SGPA calculator for university students. Calculate multiple semesters instantly. Developed by Minhajul Islam.">
     <meta name="keywords" content="CGPA calculator, DIU CGPA calculator, university grade calculator, SGPA calculator, Minhajul Islam">
     
-    <!-- External Libraries for Chart and PDF -->
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0070f3">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!-- External Libraries for Chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -60,7 +65,6 @@
         .btn-success { background: var(--success); } .btn-success:hover { background: var(--success-hover); }
         .btn-warning { background: var(--warning); color: #fff; width: 100%; margin-top: 0.5rem; padding: 0.5rem; font-size: 0.9rem;}
         .btn-warning:hover { background: var(--warning-hover); }
-        .btn-secondary { background: #888; color: white; } .btn-secondary:hover { background: #666; }
 
         .semester-block { background: var(--semester-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; position: relative; }
         .semester-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
@@ -116,7 +120,7 @@
             .semester-print-table th, .semester-print-table td { border: 1px solid #000; padding: 5px; text-align: left; }
             .semester-print-table th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .text-center { text-align: center !important; }
-            .print-footer { margin-top: 40px; text-align: center; font-size: 11px; font-style: italic; }
+            .print-footer { margin-top: 40px; text-align: center; font-size: 11px; font-style: italic; border-top: 1px dashed #000; padding-top: 15px; padding-bottom: 10px; }
         }
     </style>
 </head>
@@ -231,7 +235,7 @@
         function changeTheme(themeName) {
             document.documentElement.setAttribute('data-theme', themeName);
             localStorage.setItem('savedTheme', themeName);
-            if(myChart) calculateCGPA(); // Redraw chart to match theme colors
+            if(myChart) calculateCGPA(); 
         }
 
         // ================= TEMPLATES =================
@@ -670,6 +674,17 @@
                 <div class="print-footer avoid-break">This document has been generated electronically and is valid without a physical signature.</div>
             `;
             window.print();
+        }
+    </script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker Registered!', reg))
+                    .catch(err => console.log('Service Worker Registration Failed:', err));
+            });
         }
     </script>
 </body>

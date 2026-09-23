@@ -1,14 +1,16 @@
-const CACHE_NAME = 'diu-cgpa-cache-v3';
+const CACHE_NAME = 'diu-cgpa-cache-v4';
 const ASSETS_TO_CACHE = [
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 // Install Event: Save files to offline cache
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('Opened cache v3');
+      console.log('Opened cache v4');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
@@ -33,11 +35,26 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Event: Serve from cache if offline
+// Fetch Event: Serve from cache when available and runtime-cache the Chart.js CDN file.
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+  const url = event.request.url;
+  const isChart = url.includes('cdn.jsdelivr.net/npm/chart.js');
+  if (isChart) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });

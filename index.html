@@ -100,6 +100,33 @@
         .social-links a { text-decoration: none; color: var(--text); background: var(--card-bg); padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 500; border: 1px solid var(--border-color); transition: all 0.3s ease; }
         .social-links a:hover { background: var(--primary); color: white; border-color: var(--primary); }
         
+        /* ================= ACADEMIC DASHBOARD ================= */
+        .dashboard-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0.9rem; margin-top:1rem; }
+        .stat-card { background:var(--card-bg); border:1px solid var(--border-color); border-radius:10px; padding:1rem; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+        .stat-card .stat-label { color:var(--text-muted); font-size:0.82rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
+        .stat-card .stat-value { color:var(--primary); font-size:1.75rem; font-weight:800; margin:0.2rem 0; }
+        .stat-card .stat-meta { color:var(--text-muted); font-size:0.82rem; }
+        .analytics-section { margin-top:1.5rem; background:var(--semester-bg); border:1px solid var(--border-color); border-radius:10px; padding:1.25rem; }
+        .analytics-section h3 { margin-top:0; }
+        .analytics-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+        .analytics-table { width:100%; border-collapse:collapse; min-width:420px; font-size:0.9rem; }
+        .analytics-table th,.analytics-table td { border:1px solid var(--border-color); padding:8px; text-align:center; color:var(--text); }
+        .analytics-table th { background:var(--primary); color:#fff; }
+        .analytics-table tr:nth-child(even) { background:var(--table-even); }
+        .insights-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0.75rem; margin-top:1rem; }
+        .insight-chip { background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px; padding:0.8rem; }
+        .insight-chip strong { display:block; font-size:1.05rem; color:var(--primary); }
+        .insight-chip span { font-size:0.78rem; color:var(--text-muted); }
+        .category-note { font-size:0.82rem; color:var(--text-muted); margin:0.75rem 0 0; }
+        .category-auto { flex:1; min-width:100px; display:flex; align-items:center; justify-content:center; padding:0.65rem 0.5rem; border:1px solid var(--border-color); border-radius:6px; background:var(--card-bg); font-size:0.82rem; font-weight:700; color:var(--text-muted); }
+        .category-auto.major { color:var(--primary); }
+        .category-auto.non-major { color:var(--text-muted); }
+        .save-status { text-align:center; font-size:0.78rem; color:var(--text-muted); margin-top:0.75rem; }
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns:1fr; }
+            .insights-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        }
+
         /* ================= MOBILE RESPONSIVE FIXES ================= */
         @media (max-width: 768px) { 
             body { margin: 0; padding: 0.5rem; }
@@ -239,6 +266,13 @@
             <input type="number" id="prevCgpa" class="flex-1 save-trigger" placeholder="Previous CGPA (e.g., 3.80)" step="0.01" min="0" max="4.00">
             <input type="number" id="prevCredits" class="flex-1 save-trigger" placeholder="Previous Credits (e.g., 45)" step="0.5" min="0">
         </div>
+        <p class="category-note">Course type is automatic: any course code containing <strong>CSE</strong> is treated as <strong>Major</strong>; all other course codes are treated as <strong>Non-Major</strong>.</p>
+
+        <h3>Degree Settings</h3>
+        <div class="row">
+            <input type="number" id="degreeCredits" class="flex-1 save-trigger" value="154.5" placeholder="Total Degree Credits" step="0.5" min="1">
+            <button class="btn-outline btn-sm" onclick="resetAllData()" style="width:auto; min-width:160px;">♻️ Reset Saved Data</button>
+        </div>
 
         <h3>Semesters</h3>
         <div id="allSemestersContainer"></div>
@@ -256,6 +290,29 @@
         </div>
 
         <div id="resultBox" class="result"></div>
+
+        <div id="analyticsSection" class="analytics-section" style="display:none;">
+            <h3>📊 Academic Dashboard</h3>
+            <div class="dashboard-grid">
+                <div class="stat-card"><div class="stat-label">Overall CGPA</div><div class="stat-value" id="overallCgpaStat">—</div><div class="stat-meta" id="overallCreditsStat">0 credits</div></div>
+                <div class="stat-card"><div class="stat-label">Major CGPA</div><div class="stat-value" id="majorCgpaStat">—</div><div class="stat-meta" id="majorCreditsStat">0 credits</div></div>
+                <div class="stat-card"><div class="stat-label">Non-Major CGPA</div><div class="stat-value" id="nonMajorCgpaStat">—</div><div class="stat-meta" id="nonMajorCreditsStat">0 credits</div></div>
+            </div>
+            <div class="insights-grid">
+                <div class="insight-chip"><strong id="creditProgressStat">0%</strong><span>Degree Progress (<span id="creditProgressMeta">0 / 154.5 credits</span>)</span></div>
+                <div class="insight-chip"><strong id="totalCoursesInsight">0</strong><span>Courses Counted</span></div>
+                <div class="insight-chip"><strong id="failedCoursesInsight">0</strong><span>Failed Courses</span></div>
+                <div class="insight-chip"><strong id="highestGradeInsight">—</strong><span>Highest Grade Point • <span id="highestCourseInsight">—</span></span></div>
+                <div class="insight-chip"><strong id="lowestGradeInsight">—</strong><span>Lowest Grade Point • <span id="lowestCourseInsight">—</span></span></div>
+            </div>
+            <h3>Grade Distribution</h3>
+            <div class="analytics-table-wrap">
+                <table class="analytics-table"><thead><tr><th>Grade</th><th>Overall</th><th>Major</th><th>Non-Major</th></tr></thead><tbody id="gradeDistributionBody"></tbody></table>
+            </div>
+            <p class="category-note">Major/Non-Major CGPA is detected automatically from the course code: codes containing <strong>CSE</strong> are Major; everything else is Non-Major.</p>
+        </div>
+
+        <div id="saveStatus" class="save-status">✓ Data is stored locally on this device</div>
 
         <div id="goalPlanner" class="planner-card">
             <h3 style="color: var(--warning); margin-top:0;">🎯 Target CGPA Planner</h3>
@@ -309,10 +366,26 @@
             if(myChart) calculateCGPA(); 
         }
 
+        function getCourseCategory(courseCode) {
+            return String(courseCode || '').toUpperCase().includes('CSE') ? 'Major' : 'Non-Major';
+        }
+
+        function updateCourseCategory(input) {
+            const row = input.closest('.subject-row');
+            if (!row) return;
+            const badge = row.querySelector('.category-auto');
+            if (!badge) return;
+            const category = getCourseCategory(input.value.trim());
+            badge.textContent = category;
+            badge.className = `category-auto ${category === 'Major' ? 'major' : 'non-major'}`;
+            badge.title = category === 'Major' ? 'Automatic: course code contains CSE' : 'Automatic: course code does not contain CSE';
+        }
+
         const getSubjectHtml = (cCode='', cTitle='', credit='', dropdownVal='', gpa='') => `
-            <input type="text" class="flex-1 course-code-input save-trigger" placeholder="Course Code (Opt)" value="${cCode}">
+            <input type="text" class="flex-1 course-code-input save-trigger" placeholder="Course Code (Opt)" value="${cCode}" oninput="updateCourseCategory(this); saveData();">
             <input type="text" class="flex-3 course-title-input save-trigger" placeholder="Course Title (Opt)" value="${cTitle}">
             <input type="number" class="flex-1 credit-input save-trigger" placeholder="Credit" step="0.5" min="0" value="${credit}" required>
+            <div class="category-auto ${getCourseCategory(cCode) === 'Major' ? 'major' : 'non-major'}" title="${getCourseCategory(cCode) === 'Major' ? 'Automatic: course code contains CSE' : 'Automatic: course code does not contain CSE'}">${getCourseCategory(cCode)}</div>
             <div class="grade-wrapper">
                 <select class="flex-1 grade-select save-trigger" onchange="handleGradeChange(this)" required>
                     <option value="" disabled ${dropdownVal===''?'selected':''}>Grade</option>
@@ -331,7 +404,7 @@
         function addSubject(btn, data={}) {
             const container = btn.closest('.semester-block').querySelector('.subjects-container');
             const row = document.createElement('div'); row.className = 'row subject-row'; 
-            row.innerHTML = getSubjectHtml(data.cCode, data.cTitle, data.credit, data.dropdownVal, data.gpa);
+            row.innerHTML = getSubjectHtml(data.cCode || '', data.cTitle || '', data.credit || '', data.dropdownVal || '', data.gpa || '');
             container.appendChild(row);
             saveData();
         }
@@ -419,29 +492,68 @@
         }
 
         function calculateCGPA() {
-            const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0; 
+            const prevCgpa = parseFloat(document.getElementById('prevCgpa').value) || 0;
             const prevCredits = parseFloat(document.getElementById('prevCredits').value) || 0;
-            let globalPoints = (prevCgpa * prevCredits), globalCredits = prevCredits, semHTML = "", hasValid = false;
+            let globalPoints = prevCgpa * prevCredits;
+            let globalCredits = prevCredits;
+            let majorPoints = 0;
+            let majorCredits = 0;
+            let nonMajorPoints = 0;
+            let nonMajorCredits = 0;
+            let semHTML = '', hasValid = false;
             let chartLabels = [], sgpaData = [], cgpaData = [];
             let runningPoints = globalPoints, runningCredits = globalCredits;
 
-            if(prevCredits > 0) { chartLabels.push('Previous'); sgpaData.push(prevCgpa.toFixed(2)); cgpaData.push(prevCgpa.toFixed(2)); }
+            if (prevCredits > 0) {
+                chartLabels.push('Previous');
+                sgpaData.push(prevCgpa.toFixed(2));
+                cgpaData.push(prevCgpa.toFixed(2));
+            }
+
+            const gradeOrder = ['A+','A','A-','B+','B','B-','C+','C','D','F','Custom'];
+            const overallGrades = Object.fromEntries(gradeOrder.map(g => [g, 0]));
+            const majorGrades = Object.fromEntries(gradeOrder.map(g => [g, 0]));
+            const nonMajorGrades = Object.fromEntries(gradeOrder.map(g => [g, 0]));
+            let totalCourses = 0, failedCourses = 0, highestGpa = -1, highestCourse = '-', lowestGpa = 99, lowestCourse = '-';
 
             document.querySelectorAll('.semester-block').forEach((block, index) => {
-                let semPoints = 0, semCredits = 0;
+                let semPoints = 0, semCredits = 0, semMajorPoints = 0, semMajorCredits = 0, semNonMajorPoints = 0, semNonMajorCredits = 0;
                 let semName = block.querySelector('.semester-name-input').value.trim() || `Semester ${index + 1}`;
-                
+
                 block.querySelectorAll('.subject-row').forEach(row => {
                     const credit = parseFloat(row.querySelector('.credit-input').value);
                     const sel = row.querySelector('.grade-select');
                     const gpa = sel.value === 'custom' ? parseFloat(row.querySelector('.gpa-input').value) : parseFloat(sel.value);
-                    if (!isNaN(credit) && !isNaN(gpa)) { semPoints += (credit * gpa); semCredits += credit; hasValid = true; }
+                    const code = row.querySelector('.course-code-input').value.trim();
+                    const category = getCourseCategory(code);
+                    const title = row.querySelector('.course-title-input').value.trim();
+                    if (!isNaN(credit) && credit > 0 && !isNaN(gpa) && gpa >= 0 && gpa <= 4) {
+                        semPoints += credit * gpa; semCredits += credit; hasValid = true; totalCourses++;
+                        if (gpa === 0) failedCourses++;
+                        if (gpa > highestGpa) { highestGpa = gpa; highestCourse = code || title || 'Course'; }
+                        if (gpa < lowestGpa) { lowestGpa = gpa; lowestCourse = code || title || 'Course'; }
+
+                        let gradeLabel = sel.value === 'custom' ? 'Custom' : ((sel.options[sel.selectedIndex]?.text || '').split(' ')[0] || 'Custom');
+                        overallGrades[gradeLabel] = (overallGrades[gradeLabel] || 0) + 1;
+
+                        if (category === 'Non-Major') {
+                            semNonMajorPoints += credit * gpa; semNonMajorCredits += credit;
+                            nonMajorGrades[gradeLabel] = (nonMajorGrades[gradeLabel] || 0) + 1;
+                        } else {
+                            semMajorPoints += credit * gpa; semMajorCredits += credit;
+                            majorGrades[gradeLabel] = (majorGrades[gradeLabel] || 0) + 1;
+                        }
+                    }
                 });
-                
+
                 if (semCredits > 0) {
-                    const sgpa = semPoints/semCredits;
-                    semHTML += `<p>${semName} SGPA: <strong style="color:var(--primary)">${sgpa.toFixed(2)}</strong> (Credits: ${semCredits})</p>`;
+                    const sgpa = semPoints / semCredits;
+                    const semMajorCgpa = semMajorCredits > 0 ? (semMajorPoints / semMajorCredits).toFixed(2) : '—';
+                    const semNonMajorCgpa = semNonMajorCredits > 0 ? (semNonMajorPoints / semNonMajorCredits).toFixed(2) : '—';
+                    semHTML += `<div style="padding:0.35rem 0;"><strong>${escapeHtml(semName)}</strong>: SGPA <strong style="color:var(--primary)">${sgpa.toFixed(2)}</strong> (Credits: ${semCredits.toFixed(2)}) <span style="color:var(--text-muted)">| Major: ${semMajorCgpa} | Non-Major: ${semNonMajorCgpa}</span></div>`;
                     runningPoints += semPoints; runningCredits += semCredits;
+                    majorPoints += semMajorPoints; majorCredits += semMajorCredits;
+                    nonMajorPoints += semNonMajorPoints; nonMajorCredits += semNonMajorCredits;
                     chartLabels.push(semName); sgpaData.push(sgpa.toFixed(2)); cgpaData.push((runningPoints / runningCredits).toFixed(2));
                 }
             });
@@ -449,26 +561,57 @@
             globalPoints = runningPoints; globalCredits = runningCredits;
             const res = document.getElementById('resultBox');
 
-            if (!hasValid && prevCredits === 0) { 
-                res.style.display = 'block'; res.style.borderLeftColor = 'var(--danger)'; 
-                res.innerHTML = '<p style="color: var(--danger); margin:0;">Please extract or enter valid data.</p>'; 
-                document.getElementById('downloadPdfBtn').style.display = 'none'; 
-                document.getElementById('chartSection').style.display = 'none'; document.getElementById('goalPlanner').style.display = 'none'; return; 
+            if (!hasValid && prevCredits === 0) {
+                res.style.display = 'block'; res.style.borderLeftColor = 'var(--danger)';
+                res.innerHTML = '<p style="color: var(--danger); margin:0;">Please extract or enter valid data.</p>';
+                document.getElementById('downloadPdfBtn').style.display = 'none';
+                document.getElementById('chartSection').style.display = 'none';
+                document.getElementById('goalPlanner').style.display = 'none';
+                document.getElementById('analyticsSection').style.display = 'none';
+                return;
             }
-            
-            const finalCgpa = globalCredits > 0 ? (globalPoints / globalCredits) : 0;
-            res.style.display = 'block'; res.style.borderLeftColor = 'var(--primary)';
-            res.innerHTML = (semHTML ? `<div class="semester-sgpa-list">${semHTML}</div>` : "") + 
-                            `<p>Total Credits: <strong>${globalCredits.toFixed(2)}</strong></p><p class="highlight">Overall Final CGPA: ${finalCgpa.toFixed(2)}</p>`;
-            
-            document.getElementById('downloadPdfBtn').style.display = 'block'; document.getElementById('goalPlanner').style.display = 'block';
-            globalStats = { currentPoints: globalPoints, currentCredits: globalCredits, currentCgpa: finalCgpa };
 
-            if(chartLabels.length > 0) { document.getElementById('chartSection').style.display = 'block'; drawDualChart(chartLabels, sgpaData, cgpaData); }
+            const finalCgpa = globalCredits > 0 ? globalPoints / globalCredits : 0;
+            const majorCgpa = majorCredits > 0 ? majorPoints / majorCredits : null;
+            const nonMajorCgpa = nonMajorCredits > 0 ? nonMajorPoints / nonMajorCredits : null;
+            const completedProgress = Math.min(100, (globalCredits / (parseFloat(document.getElementById('degreeCredits').value) || 154.5)) * 100);
+
+            res.style.display = 'block'; res.style.borderLeftColor = 'var(--primary)';
+            res.innerHTML = (semHTML ? `<div class="semester-sgpa-list">${semHTML}</div>` : '') +
+                `<p>Total Credits: <strong>${globalCredits.toFixed(2)}</strong></p><p class="highlight">Overall Final CGPA: ${finalCgpa.toFixed(2)}</p>`;
+
+            document.getElementById('downloadPdfBtn').style.display = 'block';
+            document.getElementById('goalPlanner').style.display = 'block';
+            document.getElementById('analyticsSection').style.display = 'block';
+            globalStats = { currentPoints: globalPoints, currentCredits: globalCredits, currentCgpa: finalCgpa, majorPoints, majorCredits, majorCgpa, nonMajorPoints, nonMajorCredits, nonMajorCgpa };
+
+            document.getElementById('overallCgpaStat').textContent = finalCgpa.toFixed(2);
+            document.getElementById('overallCreditsStat').textContent = `${globalCredits.toFixed(2)} credits`;
+            document.getElementById('majorCgpaStat').textContent = majorCgpa === null ? '—' : majorCgpa.toFixed(2);
+            document.getElementById('majorCreditsStat').textContent = `${majorCredits.toFixed(2)} credits`;
+            document.getElementById('nonMajorCgpaStat').textContent = nonMajorCgpa === null ? '—' : nonMajorCgpa.toFixed(2);
+            document.getElementById('nonMajorCreditsStat').textContent = `${nonMajorCredits.toFixed(2)} credits`;
+            document.getElementById('creditProgressStat').textContent = `${completedProgress.toFixed(1)}%`;
+            document.getElementById('creditProgressMeta').textContent = `${globalCredits.toFixed(2)} / ${(parseFloat(document.getElementById('degreeCredits').value) || 154.5).toFixed(1)} credits`;
+
+            const gradeRows = gradeOrder.filter(g => (overallGrades[g] || 0) > 0).map(g => `<tr><td>${g}</td><td>${overallGrades[g]}</td><td>${majorGrades[g] || 0}</td><td>${nonMajorGrades[g] || 0}</td></tr>`).join('');
+            document.getElementById('gradeDistributionBody').innerHTML = gradeRows || '<tr><td colspan="4">No graded courses yet.</td></tr>';
+            document.getElementById('totalCoursesInsight').textContent = totalCourses;
+            document.getElementById('failedCoursesInsight').textContent = failedCourses;
+            document.getElementById('highestGradeInsight').textContent = highestGpa >= 0 ? highestGpa.toFixed(2) : '—';
+            document.getElementById('highestCourseInsight').textContent = highestGpa >= 0 ? highestCourse : 'No course';
+            document.getElementById('lowestGradeInsight').textContent = lowestGpa < 99 ? lowestGpa.toFixed(2) : '—';
+            document.getElementById('lowestCourseInsight').textContent = lowestGpa < 99 ? lowestCourse : 'No course';
+
+            if (chartLabels.length > 0) { document.getElementById('chartSection').style.display = 'block'; drawDualChart(chartLabels, sgpaData, cgpaData); }
             saveData();
         }
 
         function drawDualChart(labels, sgpaData, cgpaData) {
+            if (typeof Chart === 'undefined') {
+                document.getElementById('chartSection').style.display = 'none';
+                return;
+            }
             const ctx = document.getElementById('sgpaChart').getContext('2d');
             const style = getComputedStyle(document.body);
             const lineColor = style.getPropertyValue('--chart-line').trim(), bgColor = style.getPropertyValue('--chart-bg').trim();
@@ -503,14 +646,32 @@
             else resDiv.innerHTML = `✅ You need an SGPA of <span style="color:var(--primary); font-size:1.2rem;">${requiredSgpa.toFixed(2)}</span> next semester.`;
         }
 
+        function escapeHtml(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+        }
+
+        function resetAllData() {
+            if (!confirm('Reset all calculator data saved on this device?')) return;
+            localStorage.removeItem('diu_cgpa_data');
+            document.getElementById('studentName').value = ''; document.getElementById('studentId').value = '';
+            document.getElementById('programName').value = ''; document.getElementById('enrollmentSession').value = ''; document.getElementById('batchNo').value = '';
+            ['prevCgpa','prevCredits'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('allSemestersContainer').innerHTML = ''; semesterCount = 0; addSemester();
+            document.getElementById('analyticsSection').style.display = 'none';
+            document.getElementById('resultBox').style.display = 'none';
+            saveData();
+        }
+
         function escapeCSV(str) { return str == null ? '""' : '"' + String(str).replace(/"/g, '""') + '"'; }
         function exportCSV() {
-            saveData(); let csvContent = "Type,Val1,Val2,Val3,Val4,Val5,Val6,Val7\n";
-            csvContent += ["Header", document.getElementById('studentName').value, document.getElementById('studentId').value, document.getElementById('programName').value, document.getElementById('enrollmentSession').value, document.getElementById('batchNo').value, document.getElementById('prevCgpa').value, document.getElementById('prevCredits').value].map(escapeCSV).join(",") + "\n";
+            saveData();
+            let csvContent = "Type,Val1,Val2,Val3,Val4,Val5,Val6,Val7,Val8,Val9,Val10\n";
+            // Keep the 10-value header shape for compatibility with older CSV backups.
+            csvContent += ["Header", document.getElementById('studentName').value, document.getElementById('studentId').value, document.getElementById('programName').value, document.getElementById('enrollmentSession').value, document.getElementById('batchNo').value, document.getElementById('prevCgpa').value, document.getElementById('prevCredits').value, "", "", document.getElementById('degreeCredits').value].map(escapeCSV).join(",") + "\n";
             document.querySelectorAll('.semester-block').forEach(block => {
                 csvContent += ["Semester", block.querySelector('.semester-name-input').value].map(escapeCSV).join(",") + "\n";
                 block.querySelectorAll('.subject-row').forEach(row => {
-                    csvContent += ["Subject", row.querySelector('.course-code-input').value, row.querySelector('.course-title-input').value, row.querySelector('.credit-input').value, row.querySelector('.grade-select').value, row.querySelector('.gpa-input').value].map(escapeCSV).join(",") + "\n";
+                    csvContent += ["Subject", row.querySelector('.course-code-input').value, row.querySelector('.course-title-input').value, row.querySelector('.credit-input').value, row.querySelector('.grade-select').value, row.querySelector('.gpa-input').value, getCourseCategory(row.querySelector('.course-code-input').value.trim())].map(escapeCSV).join(",") + "\n";
                 });
             });
             const a = document.createElement('a'); a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent); a.download = "diu_cgpa_backup.csv";
@@ -526,26 +687,39 @@
                     if(!line.trim()) return;
                     let ret = [], val = '', inQ = false;
                     for(let i=0; i<line.length; i++) { if(line[i]==='"' && line[i+1]==='"'){val+='"';i++;} else if(line[i]==='"') inQ=!inQ; else if(line[i]===',' && !inQ){ret.push(val);val='';} else val+=line[i]; } ret.push(val);
-                    if(ret[0] === 'Header') data.header = { name: ret[1], id: ret[2], program: ret[3], session: ret[4], batch: ret[5], prevCgpa: ret[6], prevCredits: ret[7] };
+                    if(ret[0] === 'Header') data.header = { name: ret[1], id: ret[2], program: ret[3], session: ret[4], batch: ret[5], prevCgpa: ret[6], prevCredits: ret[7], degreeCredits: ret[10] || '154.5' };
+                    else if(ret[0] === 'PreviousCategory') { data.header.prevNonMajorCgpa = ret[1] || ''; data.header.prevNonMajorCredits = ret[2] || ''; }
                     else if(ret[0] === 'Semester') { if(currentSem) data.semesters.push(currentSem); currentSem = { name: ret[1], subjects: [] }; }
                     else if(ret[0] === 'Subject' && currentSem) currentSem.subjects.push({ cCode: ret[1], cTitle: ret[2], credit: ret[3], dropdownVal: ret[4], gpa: ret[5] });
                 });
                 if(currentSem) data.semesters.push(currentSem);
-                localStorage.setItem('diu_cgpa_data', JSON.stringify(data)); loadData(JSON.stringify(data)); alert("Imported!"); event.target.value = ''; 
+                localStorage.setItem('diu_cgpa_data', JSON.stringify(data)); loadData(JSON.stringify(data)); alert("Imported!"); event.target.value = '';
             }; reader.readAsText(file);
         }
 
         function saveData() {
             const data = {
-                header: { name: document.getElementById('studentName').value, id: document.getElementById('studentId').value, program: document.getElementById('programName').value, session: document.getElementById('enrollmentSession').value, batch: document.getElementById('batchNo').value, prevCgpa: document.getElementById('prevCgpa').value, prevCredits: document.getElementById('prevCredits').value },
+                header: {
+                    name: document.getElementById('studentName').value, id: document.getElementById('studentId').value,
+                    program: document.getElementById('programName').value, session: document.getElementById('enrollmentSession').value,
+                    batch: document.getElementById('batchNo').value, prevCgpa: document.getElementById('prevCgpa').value, prevCredits: document.getElementById('prevCredits').value, degreeCredits: document.getElementById('degreeCredits').value,
+                },
                 semesters: []
             };
             document.querySelectorAll('.semester-block').forEach(block => {
                 const sem = { name: block.querySelector('.semester-name-input').value, subjects: [] };
                 block.querySelectorAll('.subject-row').forEach(row => {
-                    sem.subjects.push({ cCode: row.querySelector('.course-code-input').value, cTitle: row.querySelector('.course-title-input').value, credit: row.querySelector('.credit-input').value, dropdownVal: row.querySelector('.grade-select').value, gpa: row.querySelector('.gpa-input').value });
-                }); data.semesters.push(sem);
-            }); localStorage.setItem('diu_cgpa_data', JSON.stringify(data));
+                    sem.subjects.push({
+                        cCode: row.querySelector('.course-code-input').value, cTitle: row.querySelector('.course-title-input').value,
+                        credit: row.querySelector('.credit-input').value, dropdownVal: row.querySelector('.grade-select').value,
+                        gpa: row.querySelector('.gpa-input').value
+                    });
+                });
+                data.semesters.push(sem);
+            });
+            localStorage.setItem('diu_cgpa_data', JSON.stringify(data));
+            const saveStatus = document.getElementById('saveStatus');
+            if (saveStatus) saveStatus.textContent = `✓ Saved locally • ${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
         }
 
         function loadData(jsonData) {
@@ -554,7 +728,7 @@
                 const data = JSON.parse(jsonData); if(!data.header) return;
                 document.getElementById('studentName').value = data.header.name || ''; document.getElementById('studentId').value = data.header.id || '';
                 document.getElementById('programName').value = data.header.program || ''; document.getElementById('enrollmentSession').value = data.header.session || '';
-                document.getElementById('batchNo').value = data.header.batch || ''; document.getElementById('prevCgpa').value = data.header.prevCgpa || ''; document.getElementById('prevCredits').value = data.header.prevCredits || '';
+                document.getElementById('batchNo').value = data.header.batch || ''; document.getElementById('prevCgpa').value = data.header.prevCgpa || ''; document.getElementById('prevCredits').value = data.header.prevCredits || ''; document.getElementById('degreeCredits').value = data.header.degreeCredits || '154.5';
                 document.getElementById('allSemestersContainer').innerHTML = ''; semesterCount = 0;
                 if (data.semesters && data.semesters.length > 0) data.semesters.forEach(sem => addSemester(sem.name, sem.subjects)); else addSemester(); 
                 calculateCGPA();
@@ -588,17 +762,18 @@
                     const credit = parseFloat(row.querySelector('.credit-input').value), sel = row.querySelector('.grade-select');
                     const gpa = sel.value === 'custom' ? parseFloat(row.querySelector('.gpa-input').value) : parseFloat(sel.value);
                     const letter = sel.value === 'custom' ? 'Custom' : (sel.options[sel.selectedIndex]?.text || '').split(' ')[0];
-                    if (!isNaN(credit) && !isNaN(gpa)) { 
-                        semPoints += (credit * gpa); semCreditsTaken += credit; if(gpa > 0) semCreditsCompleted += credit; 
-                        tableRows += `<tr><td>${cCode}</td><td>${cTitle}</td><td class="text-center">${credit}</td><td class="text-center">${letter}</td><td class="text-center">${gpa.toFixed(2)}</td></tr>`; 
+                    const category = getCourseCategory(cCode);
+                    if (!isNaN(credit) && !isNaN(gpa)) {
+                        semPoints += (credit * gpa); semCreditsTaken += credit; if(gpa > 0) semCreditsCompleted += credit;
+                        tableRows += `<tr><td>${escapeHtml(cCode)}</td><td>${escapeHtml(cTitle)}</td><td class="text-center">${credit}</td><td class="text-center">${escapeHtml(category)}</td><td class="text-center">${escapeHtml(letter)}</td><td class="text-center">${gpa.toFixed(2)}</td></tr>`;
                     }
                 });
-                if (semCreditsTaken > 0) semestersHtml += `<div class="semester-print-block avoid-break"><div class="semester-print-header">Semester: ${block.querySelector('.semester-name-input').value || `Semester ${index + 1}`} <br>Credit Taken: ${semCreditsTaken} &nbsp;&nbsp;&nbsp; Credit Completed: ${semCreditsCompleted} &nbsp;&nbsp;&nbsp; GPA: ${(semPoints/semCreditsTaken).toFixed(2)}</div><table class="semester-print-table"><thead><tr><th style="width: 15%;">Course Code</th><th style="width: 45%;">Course Title</th><th style="width: 10%; text-align: center;">Credit</th><th style="width: 15%; text-align: center;">Grade</th><th style="width: 15%; text-align: center;">Grade Point</th></tr></thead><tbody>${tableRows}</tbody></table></div>`;
+                if (semCreditsTaken > 0) semestersHtml += `<div class="semester-print-block avoid-break"><div class="semester-print-header">Semester: ${escapeHtml(block.querySelector('.semester-name-input').value || `Semester ${index + 1}`)} <br>Credit Taken: ${semCreditsTaken} &nbsp;&nbsp;&nbsp; Credit Completed: ${semCreditsCompleted} &nbsp;&nbsp;&nbsp; GPA: ${(semPoints/semCreditsTaken).toFixed(2)}</div><table class="semester-print-table"><thead><tr><th style="width: 13%;">Course Code</th><th style="width: 34%;">Course Title</th><th style="width: 10%; text-align: center;">Credit</th><th style="width: 15%; text-align: center;">Category</th><th style="width: 13%; text-align: center;">Grade</th><th style="width: 15%; text-align: center;">Grade Point</th></tr></thead><tbody>${tableRows}</tbody></table></div>`;
             });
 
             document.getElementById('printArea').innerHTML = `
                 <div class="print-header"><h1>Daffodil International University</h1><p>Daffodil Smart City, Birulia, Savar, Dhaka-1216 Bangladesh<br>Tel: +88 02 9143254-5, 48111639, 48111670<br>E-mail: info@daffodilvarsity.edu.bd</p><h2>Transcript</h2></div>
-                <div class="info-grid"><div class="info-left"><table class="info-table"><tr><td>Program</td><td>: ${document.getElementById('programName').value || 'B.Sc. in CSE'}</td></tr><tr><td>Enrollment Session</td><td>: ${document.getElementById('enrollmentSession').value || '-'}</td></tr><tr><td>Date of Issue</td><td>: ${dateStr}</td></tr><tr><td>Name of the Student</td><td>: ${document.getElementById('studentName').value || '-'}</td></tr><tr><td>Student ID</td><td>: ${document.getElementById('studentId').value || '-'}</td></tr><tr><td>Batch</td><td>: ${document.getElementById('batchNo').value || '-'}</td></tr></table></div><div class="info-right"><b>Academic Summary</b><table class="summary-table"><tr><td>CGPA</td><td><b>${finalCgpa.toFixed(2)}</b></td></tr><tr><td>Credits Completed</td><td><b>${globalStats.currentCredits}</b></td></tr><tr><td>Total Credit Requirement</td><td><b>154.5</b></td></tr></table></div></div>
+                <div class="info-grid"><div class="info-left"><table class="info-table"><tr><td>Program</td><td>: ${escapeHtml(document.getElementById('programName').value || 'B.Sc. in CSE')}</td></tr><tr><td>Enrollment Session</td><td>: ${escapeHtml(document.getElementById('enrollmentSession').value || '-')}</td></tr><tr><td>Date of Issue</td><td>: ${dateStr}</td></tr><tr><td>Name of the Student</td><td>: ${escapeHtml(document.getElementById('studentName').value || '-')}</td></tr><tr><td>Student ID</td><td>: ${escapeHtml(document.getElementById('studentId').value || '-')}</td></tr><tr><td>Batch</td><td>: ${escapeHtml(document.getElementById('batchNo').value || '-')}</td></tr></table></div><div class="info-right"><b>Academic Summary</b><table class="summary-table"><tr><td>Overall CGPA</td><td><b>${finalCgpa.toFixed(2)}</b></td></tr><tr><td>Major CGPA</td><td><b>${globalStats.majorCgpa == null ? '—' : globalStats.majorCgpa.toFixed(2)}</b></td></tr><tr><td>Non-Major CGPA</td><td><b>${globalStats.nonMajorCgpa == null ? '—' : globalStats.nonMajorCgpa.toFixed(2)}</b></td></tr><tr><td>Credits Completed</td><td><b>${globalStats.currentCredits}</b></td></tr><tr><td>Total Credit Requirement</td><td><b>${parseFloat(document.getElementById('degreeCredits').value) || 154.5}</b></td></tr></table></div></div>
                 <div class="grading-section"><table class="grading-table"><thead><tr><th colspan="4" style="background-color:#f0f0f0 !important;-webkit-print-color-adjust:exact;">UGC Uniform Grading System</th></tr><tr><th>Marks (%)</th><th>Grade</th><th>Point</th><th>Remarks</th></tr></thead><tbody><tr><td>80-100</td><td>A+</td><td>4.00</td><td>Outstanding</td></tr><tr><td>75-79</td><td>A</td><td>3.75</td><td>Excellent</td></tr><tr><td>70-74</td><td>A-</td><td>3.50</td><td>Very Good</td></tr><tr><td>65-69</td><td>B+</td><td>3.25</td><td>Good</td></tr><tr><td>60-64</td><td>B</td><td>3.00</td><td>Satisfactory</td></tr><tr><td>55-59</td><td>B-</td><td>2.75</td><td>Above Average</td></tr><tr><td>50-54</td><td>C+</td><td>2.50</td><td>Average</td></tr><tr><td>45-49</td><td>C</td><td>2.25</td><td>Below Average</td></tr><tr><td>40-44</td><td>D</td><td>2.00</td><td>Pass</td></tr><tr><td>00-39</td><td>F</td><td>0.00</td><td>Fail</td></tr></tbody></table><div style="width: 35%; padding-left: 20px;"><br><br><b>Verify Result</b><br>Visit the student portal to verify results:<br><i>https://studentportal.diu.edu.bd</i></div></div>
                 ${parseFloat(document.getElementById('prevCredits').value) > 0 ? `<div class="avoid-break" style="background: #f4f4f4; padding: 10px; margin-bottom: 20px; font-size:11px;"><strong>Previous Record:</strong> ${parseFloat(document.getElementById('prevCredits').value)} Credits | CGPA: ${parseFloat(document.getElementById('prevCgpa').value).toFixed(2)}</div>` : ''}
                 ${semestersHtml}
